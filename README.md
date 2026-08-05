@@ -8,12 +8,12 @@
 [![mutations caught: 6/6](https://img.shields.io/badge/mutations%20caught-6%2F6-green.svg)](tools/sabotage.py)
 
 **A static worst-case stack analyser for Cortex-M firmware that models interrupt
-preemption and resolves indirect calls — and checks every bound it produces
+preemption and resolves indirect calls. Checks every bound it produces
 against the stack the firmware actually used, measured in QEMU.**
 
 On the six benchmark firmwares, the bound is never below the measurement, and in
-five of six it is exact to the byte. A bound that ignores interrupts — which is what
-every free tool surveyed below does — reports **276 bytes for a firmware that
+five of six it is exact to the byte. A bound that ignores interrupts (which is what
+every free tool surveyed below does) reports **276 bytes for a firmware that
 used 684**.
 
 ![bound versus measurement](results/bound_vs_measured.png)
@@ -43,7 +43,7 @@ The free stack analysers I could find stop in the same two places.
 [`cargo-call-stack`](https://github.com/japaric/cargo-call-stack) does not
 analyse indirect calls, because the machine code alone carries no type
 information, and it cannot compute a whole-program maximum when exceptions are
-present — handlers appear as disconnected nodes in the call graph. The scripts
+present, handlers appear as disconnected nodes in the call graph. The scripts
 built on GCC's `-fstack-usage` output (`avstack`, `WorstCaseStack`,
 `checkStackUsage`, `puncover`) have the same two gaps.
 
