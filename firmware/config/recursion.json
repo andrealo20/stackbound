@@ -1,0 +1,12 @@
+{
+  "prigroup": 0,
+  "fpu": false,
+  "handlers": {
+    "Default_Handler": { "enabled": false }
+  },
+  "recursion": {
+    "descend": 7,
+    "ping": 5,
+    "pong": 5
+  }
+}

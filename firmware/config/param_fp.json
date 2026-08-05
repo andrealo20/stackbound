@@ -1,0 +1,7 @@
+{
+  "prigroup": 0,
+  "fpu": false,
+  "handlers": {
+    "Default_Handler": { "enabled": false }
+  }
+}

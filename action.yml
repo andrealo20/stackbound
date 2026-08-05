@@ -1,0 +1,67 @@
+name: stackbound
+description: >
+  Fail the build when a Cortex-M firmware cannot be shown to fit in its stack
+  region, taking interrupt preemption and indirect calls into account.
+author: Andrea Loroni
+branding:
+  icon: bar-chart-2
+  color: blue
+
+inputs:
+  elf:
+    description: Path to the firmware ELF (unstripped, built with -g)
+    required: true
+  config:
+    description: Path to the stackbound JSON configuration
+    required: false
+    default: ""
+  stack-size:
+    description: >
+      Stack region size in bytes. Optional when the linker script exports
+      _stack_bottom and _stack_top.
+    required: false
+    default: ""
+  allow-unbounded:
+    description: Do not fail when a recursive component has no stated depth
+    required: false
+    default: "false"
+
+outputs:
+  total:
+    description: The whole-program bound in bytes
+    value: ${{ steps.run.outputs.total }}
+  headroom:
+    description: Bytes left in the stack region
+    value: ${{ steps.run.outputs.headroom }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install stackbound
+      shell: bash
+      run: pip install --quiet "${{ github.action_path }}"
+
+    - id: run
+      shell: bash
+      run: |
+        args=("${{ inputs.elf }}")
+        [ -n "${{ inputs.config }}" ] && args+=(--config "${{ inputs.config }}")
+        [ -n "${{ inputs.stack-size }}" ] && args+=(--stack-size "${{ inputs.stack-size }}")
+        [ "${{ inputs.allow-unbounded }}" = "true" ] && args+=(--allow-unbounded)
+
+        python -m stackbound report "${args[@]}" | tee report.txt
+        python -m stackbound report "${args[@]}" --json > report.json
+        python - <<'PY' >> "$GITHUB_OUTPUT"
+        import json
+        d = json.load(open("report.json"))
+        print(f"total={d['total']}")
+        print(f"headroom={d['headroom']}")
+        PY
+        {
+          echo "### stackbound"
+          echo '```'
+          cat report.txt
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        python -m stackbound check "${args[@]}"

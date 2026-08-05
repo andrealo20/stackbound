@@ -1,0 +1,52 @@
+{
+  "mutations": [
+    {
+      "mutation": "forget the hardware exception frame",
+      "file": "stackbound/nvic.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_bounds.py::test_bound_is_never_below_the_measured_watermark[isr_nesting]"
+      ]
+    },
+    {
+      "mutation": "assume interrupts cannot nest (take the largest handler instead of the chain)",
+      "file": "stackbound/nvic.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_bounds.py::test_exception_bound_needs_the_configuration"
+      ]
+    },
+    {
+      "mutation": "ignore how much stack the caller already holds at a call site",
+      "file": "stackbound/analyze.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_bounds.py::test_bound_is_the_sum_along_the_worst_path"
+      ]
+    },
+    {
+      "mutation": "read only the first entry of a const dispatch table",
+      "file": "stackbound/indirect.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_indirect.py::test_const_table_is_read_exactly"
+      ]
+    },
+    {
+      "mutation": "decode literal pools as if they were instructions",
+      "file": "stackbound/thumb.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_decode.py::test_no_function_is_flagged_in_the_benchmark"
+      ]
+    },
+    {
+      "mutation": "treat a recursive component as if it were called once",
+      "file": "stackbound/analyze.py",
+      "caught": true,
+      "failing_tests": [
+        "tests/test_bounds.py::test_deeper_recursion_costs_more"
+      ]
+    }
+  ]
+}

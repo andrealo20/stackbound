@@ -1,0 +1,10 @@
+{
+  "prigroup": 0,
+  "fpu": false,
+  "handlers": {
+    "Default_Handler": { "enabled": false },
+    "IRQ0_Handler": { "priority": 192 },
+    "IRQ1_Handler": { "priority": 128 },
+    "IRQ2_Handler": { "priority": 64 }
+  }
+}

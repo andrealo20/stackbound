@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+firmware/build/
+# results/ is committed: the JSON is the provenance for the numbers in the README

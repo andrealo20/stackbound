@@ -1,0 +1,5358 @@
+{
+  "qemu": "QEMU emulator version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.17)",
+  "machine": "mps2-an385",
+  "cpu": "cortex-m3",
+  "cases": [
+    {
+      "case": "direct",
+      "measured": 492,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 492,
+          "exception_bound": 0,
+          "total": 492,
+          "stack_size": 8192,
+          "headroom": 7700,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "level_a",
+            "level_b",
+            "level_c",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "shallow": {
+              "local": 24,
+              "bound": 28,
+              "unbounded": false
+            },
+            "level_c": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "level_b": {
+              "local": 264,
+              "bound": 340,
+              "unbounded": false
+            },
+            "level_a": {
+              "local": 136,
+              "bound": 476,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 484,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 492,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 492,
+          "exception_bound": 0,
+          "total": 492,
+          "stack_size": 8192,
+          "headroom": 7700,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "level_a",
+            "level_b",
+            "level_c",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "shallow": {
+              "local": 24,
+              "bound": 28,
+              "unbounded": false
+            },
+            "level_c": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "level_b": {
+              "local": 264,
+              "bound": 340,
+              "unbounded": false
+            },
+            "level_a": {
+              "local": 136,
+              "bound": 476,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 484,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 492,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 492,
+          "exception_bound": 0,
+          "total": 492,
+          "stack_size": 8192,
+          "headroom": 7700,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "level_a",
+            "level_b",
+            "level_c",
+            "sb_consume"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "shallow": {
+              "local": 24,
+              "bound": 28,
+              "unbounded": false
+            },
+            "level_c": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "level_b": {
+              "local": 264,
+              "bound": 340,
+              "unbounded": false
+            },
+            "level_a": {
+              "local": 136,
+              "bound": 476,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 484,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 492,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 492,
+          "exception_bound": 0,
+          "total": 492,
+          "stack_size": 8192,
+          "headroom": 7700,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "level_a",
+            "level_b",
+            "level_c",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "shallow": {
+              "local": 24,
+              "bound": 28,
+              "unbounded": false
+            },
+            "level_c": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "level_b": {
+              "local": 264,
+              "bound": 340,
+              "unbounded": false
+            },
+            "level_a": {
+              "local": 136,
+              "bound": 476,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 484,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 492,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 1.0
+    },
+    {
+      "case": "table",
+      "measured": 556,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 556,
+          "exception_bound": 0,
+          "total": 556,
+          "stack_size": 8192,
+          "headroom": 7636,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "cmd_large",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "table": 2
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd2",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            },
+            {
+              "function": "app_run",
+              "address": "0xe4",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "cmd_large": {
+              "local": 520,
+              "bound": 524,
+              "unbounded": false
+            },
+            "cmd_medium": {
+              "local": 200,
+              "bound": 204,
+              "unbounded": false
+            },
+            "cmd_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 24,
+              "bound": 548,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 556,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "cmd_orphan": {
+              "local": 1608,
+              "bound": 1612,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 556,
+          "exception_bound": 0,
+          "total": 556,
+          "stack_size": 8192,
+          "headroom": 7636,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "cmd_large",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {
+            "table": 2
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd2",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            },
+            {
+              "function": "app_run",
+              "address": "0xe4",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "cmd_large": {
+              "local": 520,
+              "bound": 524,
+              "unbounded": false
+            },
+            "cmd_medium": {
+              "local": 200,
+              "bound": 204,
+              "unbounded": false
+            },
+            "cmd_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 24,
+              "bound": 548,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 556,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "cmd_orphan": {
+              "local": 1608,
+              "bound": 1612,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 48,
+          "exception_bound": 0,
+          "total": 48,
+          "stack_size": 8192,
+          "headroom": 8144,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "sb_kv",
+            "sb_write_u32",
+            "sb_write"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "table": 2
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd2",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            },
+            {
+              "function": "app_run",
+              "address": "0xe4",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "cmd_large": {
+              "local": 520,
+              "bound": 524,
+              "unbounded": false
+            },
+            "cmd_medium": {
+              "local": 200,
+              "bound": 204,
+              "unbounded": false
+            },
+            "cmd_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 24,
+              "bound": 24,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 48,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "cmd_orphan": {
+              "local": 1608,
+              "bound": 1612,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 1644,
+          "exception_bound": 0,
+          "total": 1644,
+          "stack_size": 8192,
+          "headroom": 6548,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "cmd_orphan",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "table": 2
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd2",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            },
+            {
+              "function": "app_run",
+              "address": "0xe4",
+              "tier": "table",
+              "candidates": 3,
+              "detail": "contents of const dispatch[4]"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "cmd_large": {
+              "local": 520,
+              "bound": 524,
+              "unbounded": false
+            },
+            "cmd_medium": {
+              "local": 200,
+              "bound": 204,
+              "unbounded": false
+            },
+            "cmd_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 24,
+              "bound": 1636,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 1644,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "cmd_orphan": {
+              "local": 1608,
+              "bound": 1612,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 1.0
+    },
+    {
+      "case": "global_fp",
+      "measured": 412,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 412,
+          "exception_bound": 0,
+          "total": 412,
+          "stack_size": 8192,
+          "headroom": 7780,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "hook_b",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "typed": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd8",
+              "tier": "typed",
+              "candidates": 2,
+              "detail": "type of g_hook: long unsigned int:4(long unsigned int:4)"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_a": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 404,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 412,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_b": {
+              "local": 392,
+              "bound": 396,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "decoy_ptr": {
+              "local": 1208,
+              "bound": 1212,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "decoy_two": {
+              "local": 2016,
+              "bound": 2020,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 412,
+          "exception_bound": 0,
+          "total": 412,
+          "stack_size": 8192,
+          "headroom": 7780,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "hook_b",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {
+            "typed": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd8",
+              "tier": "typed",
+              "candidates": 2,
+              "detail": "type of g_hook: long unsigned int:4(long unsigned int:4)"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_a": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 404,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 412,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_b": {
+              "local": 392,
+              "bound": 396,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "decoy_ptr": {
+              "local": 1208,
+              "bound": 1212,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "decoy_two": {
+              "local": 2016,
+              "bound": 2020,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 48,
+          "exception_bound": 0,
+          "total": 48,
+          "stack_size": 8192,
+          "headroom": 8144,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "sb_kv",
+            "sb_write_u32",
+            "sb_write"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "typed": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd8",
+              "tier": "typed",
+              "candidates": 2,
+              "detail": "type of g_hook: long unsigned int:4(long unsigned int:4)"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_a": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 48,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_b": {
+              "local": 392,
+              "bound": 396,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "decoy_ptr": {
+              "local": 1208,
+              "bound": 1212,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "decoy_two": {
+              "local": 2016,
+              "bound": 2020,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 2036,
+          "exception_bound": 0,
+          "total": 2036,
+          "stack_size": 8192,
+          "headroom": 6156,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "decoy_two",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "typed": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "app_run",
+              "address": "0xd8",
+              "tier": "typed",
+              "candidates": 2,
+              "detail": "type of g_hook: long unsigned int:4(long unsigned int:4)"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_a": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 2028,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 2036,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "hook_b": {
+              "local": 392,
+              "bound": 396,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "decoy_ptr": {
+              "local": 1208,
+              "bound": 1212,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "decoy_two": {
+              "local": 2016,
+              "bound": 2020,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 1.0
+    },
+    {
+      "case": "param_fp",
+      "measured": 92,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 1084,
+          "exception_bound": 0,
+          "total": 1084,
+          "stack_size": 8192,
+          "headroom": 7108,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "apply",
+            "work_never",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "any": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "apply",
+              "address": "0xa6",
+              "tier": "any",
+              "candidates": 3,
+              "detail": "unknown pointer: all address-taken functions"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "work_big": {
+              "local": 264,
+              "bound": 268,
+              "unbounded": false
+            },
+            "work_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "apply": {
+              "local": 32,
+              "bound": 1068,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 1076,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 1084,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "work_never": {
+              "local": 1032,
+              "bound": 1036,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 1084,
+          "exception_bound": 0,
+          "total": 1084,
+          "stack_size": 8192,
+          "headroom": 7108,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "apply",
+            "work_never",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {
+            "any": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "apply",
+              "address": "0xa6",
+              "tier": "any",
+              "candidates": 3,
+              "detail": "unknown pointer: all address-taken functions"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "work_big": {
+              "local": 264,
+              "bound": 268,
+              "unbounded": false
+            },
+            "work_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "apply": {
+              "local": 32,
+              "bound": 1068,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 1076,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 1084,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "work_never": {
+              "local": 1032,
+              "bound": 1036,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 52,
+          "exception_bound": 0,
+          "total": 52,
+          "stack_size": 8192,
+          "headroom": 8140,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "apply",
+            "sb_consume"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "any": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "apply",
+              "address": "0xa6",
+              "tier": "any",
+              "candidates": 3,
+              "detail": "unknown pointer: all address-taken functions"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "work_big": {
+              "local": 264,
+              "bound": 268,
+              "unbounded": false
+            },
+            "work_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "apply": {
+              "local": 32,
+              "bound": 36,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 44,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 52,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "work_never": {
+              "local": 1032,
+              "bound": 1036,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 1084,
+          "exception_bound": 0,
+          "total": 1084,
+          "stack_size": 8192,
+          "headroom": 7108,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "apply",
+            "work_never",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {
+            "any": 1
+          },
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [
+            {
+              "function": "apply",
+              "address": "0xa6",
+              "tier": "any",
+              "candidates": 3,
+              "detail": "unknown pointer: all address-taken functions"
+            }
+          ],
+          "flagged": {},
+          "functions": {
+            "work_big": {
+              "local": 264,
+              "bound": 268,
+              "unbounded": false
+            },
+            "work_small": {
+              "local": 40,
+              "bound": 44,
+              "unbounded": false
+            },
+            "apply": {
+              "local": 32,
+              "bound": 1068,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 1076,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 1084,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "work_never": {
+              "local": 1032,
+              "bound": 1036,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 11.782608695652174
+    },
+    {
+      "case": "recursion",
+      "measured": 580,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 580,
+          "exception_bound": 0,
+          "total": 580,
+          "stack_size": 8192,
+          "headroom": 7612,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "descend",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {
+            "descend": [
+              "recursive"
+            ],
+            "pong": [
+              "recursive"
+            ],
+            "ping": [
+              "recursive"
+            ]
+          },
+          "functions": {
+            "descend": {
+              "local": 80,
+              "bound": 564,
+              "unbounded": false
+            },
+            "pong": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "ping": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 572,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 580,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 580,
+          "exception_bound": 0,
+          "total": 580,
+          "stack_size": 8192,
+          "headroom": 7612,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "descend",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {
+            "descend": [
+              "recursive"
+            ],
+            "pong": [
+              "recursive"
+            ],
+            "ping": [
+              "recursive"
+            ]
+          },
+          "functions": {
+            "descend": {
+              "local": 80,
+              "bound": 564,
+              "unbounded": false
+            },
+            "pong": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "ping": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 572,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 580,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 580,
+          "exception_bound": 0,
+          "total": 580,
+          "stack_size": 8192,
+          "headroom": 7612,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "descend",
+            "sb_consume"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {
+            "descend": [
+              "recursive"
+            ],
+            "pong": [
+              "recursive"
+            ],
+            "ping": [
+              "recursive"
+            ]
+          },
+          "functions": {
+            "descend": {
+              "local": 80,
+              "bound": 564,
+              "unbounded": false
+            },
+            "pong": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "ping": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 572,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 580,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 580,
+          "exception_bound": 0,
+          "total": 580,
+          "stack_size": 8192,
+          "headroom": 7612,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "descend",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 16,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 17,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 18,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {
+            "descend": [
+              "recursive"
+            ],
+            "pong": [
+              "recursive"
+            ],
+            "ping": [
+              "recursive"
+            ]
+          },
+          "functions": {
+            "descend": {
+              "local": 80,
+              "bound": 564,
+              "unbounded": false
+            },
+            "pong": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "ping": {
+              "local": 48,
+              "bound": 244,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 572,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 580,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 1.0
+    },
+    {
+      "case": "isr_nesting",
+      "measured": 684,
+      "modes": {
+        "full": {
+          "entry": "Reset_Handler",
+          "thread_bound": 276,
+          "exception_bound": 432,
+          "total": 708,
+          "stack_size": 8192,
+          "headroom": 7484,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "main_outer",
+            "main_inner",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {
+            "level 32": 112,
+            "level 64": 144,
+            "level 96": 176
+          },
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "IRQ0_Handler",
+              "vector": 16,
+              "priority": 192,
+              "enabled": true,
+              "stack": 140
+            },
+            {
+              "name": "IRQ1_Handler",
+              "vector": 17,
+              "priority": 128,
+              "enabled": true,
+              "stack": 108
+            },
+            {
+              "name": "IRQ2_Handler",
+              "vector": 18,
+              "priority": 64,
+              "enabled": true,
+              "stack": 76
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "main_inner": {
+              "local": 168,
+              "bound": 172,
+              "unbounded": false
+            },
+            "main_outer": {
+              "local": 88,
+              "bound": 260,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ0_Handler": {
+              "local": 136,
+              "bound": 140,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 268,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 276,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ2_Handler": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "IRQ1_Handler": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "no_exceptions": {
+          "entry": "Reset_Handler",
+          "thread_bound": 276,
+          "exception_bound": 0,
+          "total": 276,
+          "stack_size": 8192,
+          "headroom": 7916,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "main_outer",
+            "main_inner",
+            "sb_consume"
+          ],
+          "indirect_mode": "full",
+          "exceptions_modelled": false,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {},
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "IRQ0_Handler",
+              "vector": 16,
+              "priority": 192,
+              "enabled": true,
+              "stack": 140
+            },
+            {
+              "name": "IRQ1_Handler",
+              "vector": 17,
+              "priority": 128,
+              "enabled": true,
+              "stack": 108
+            },
+            {
+              "name": "IRQ2_Handler",
+              "vector": 18,
+              "priority": 64,
+              "enabled": true,
+              "stack": 76
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "main_inner": {
+              "local": 168,
+              "bound": 172,
+              "unbounded": false
+            },
+            "main_outer": {
+              "local": 88,
+              "bound": 260,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ0_Handler": {
+              "local": 136,
+              "bound": 140,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 268,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 276,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ2_Handler": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "IRQ1_Handler": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_none": {
+          "entry": "Reset_Handler",
+          "thread_bound": 276,
+          "exception_bound": 432,
+          "total": 708,
+          "stack_size": 8192,
+          "headroom": 7484,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "main_outer",
+            "main_inner",
+            "sb_consume"
+          ],
+          "indirect_mode": "none",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {
+            "level 32": 112,
+            "level 64": 144,
+            "level 96": 176
+          },
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "IRQ0_Handler",
+              "vector": 16,
+              "priority": 192,
+              "enabled": true,
+              "stack": 140
+            },
+            {
+              "name": "IRQ1_Handler",
+              "vector": 17,
+              "priority": 128,
+              "enabled": true,
+              "stack": 108
+            },
+            {
+              "name": "IRQ2_Handler",
+              "vector": 18,
+              "priority": 64,
+              "enabled": true,
+              "stack": 76
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "main_inner": {
+              "local": 168,
+              "bound": 172,
+              "unbounded": false
+            },
+            "main_outer": {
+              "local": 88,
+              "bound": 260,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ0_Handler": {
+              "local": 136,
+              "bound": 140,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 268,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 276,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ2_Handler": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "IRQ1_Handler": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        },
+        "indirect_any": {
+          "entry": "Reset_Handler",
+          "thread_bound": 276,
+          "exception_bound": 432,
+          "total": 708,
+          "stack_size": 8192,
+          "headroom": 7484,
+          "unbounded": [],
+          "worst_path": [
+            "Reset_Handler",
+            "app_run",
+            "main_outer",
+            "main_inner",
+            "sb_consume"
+          ],
+          "indirect_mode": "any",
+          "exceptions_modelled": true,
+          "frame_size": 36,
+          "tier_counts": {},
+          "level_costs": {
+            "level 32": 112,
+            "level 64": 144,
+            "level 96": 176
+          },
+          "handlers": [
+            {
+              "name": "Default_Handler",
+              "vector": 2,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 3,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 4,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 5,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 6,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 11,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 12,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 14,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 15,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            },
+            {
+              "name": "IRQ0_Handler",
+              "vector": 16,
+              "priority": 192,
+              "enabled": true,
+              "stack": 140
+            },
+            {
+              "name": "IRQ1_Handler",
+              "vector": 17,
+              "priority": 128,
+              "enabled": true,
+              "stack": 108
+            },
+            {
+              "name": "IRQ2_Handler",
+              "vector": 18,
+              "priority": 64,
+              "enabled": true,
+              "stack": 76
+            },
+            {
+              "name": "Default_Handler",
+              "vector": 19,
+              "priority": null,
+              "enabled": false,
+              "stack": 0
+            }
+          ],
+          "sites": [],
+          "flagged": {},
+          "functions": {
+            "main_inner": {
+              "local": 168,
+              "bound": 172,
+              "unbounded": false
+            },
+            "main_outer": {
+              "local": 88,
+              "bound": 260,
+              "unbounded": false
+            },
+            "semihost": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ0_Handler": {
+              "local": 136,
+              "bound": 140,
+              "unbounded": false
+            },
+            "app_run": {
+              "local": 8,
+              "bound": 268,
+              "unbounded": false
+            },
+            "sb_exit": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            },
+            "sb_irq_pend": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Reset_Handler": {
+              "local": 8,
+              "bound": 276,
+              "unbounded": false
+            },
+            "sb_kv": {
+              "local": 8,
+              "bound": 40,
+              "unbounded": false
+            },
+            "sb_write_u32": {
+              "local": 24,
+              "bound": 32,
+              "unbounded": false
+            },
+            "app_name": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "Default_Handler": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "IRQ2_Handler": {
+              "local": 72,
+              "bound": 76,
+              "unbounded": false
+            },
+            "sb_irq_enable": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_stack_watermark": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "sb_consume": {
+              "local": 4,
+              "bound": 4,
+              "unbounded": false
+            },
+            "IRQ1_Handler": {
+              "local": 104,
+              "bound": 108,
+              "unbounded": false
+            },
+            "sb_paint_stack": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_irq_set_priority": {
+              "local": 0,
+              "bound": 0,
+              "unbounded": false
+            },
+            "sb_write": {
+              "local": 8,
+              "bound": 8,
+              "unbounded": false
+            }
+          }
+        }
+      },
+      "sound": true,
+      "tightness": 1.0350877192982457
+    }
+  ]
+}

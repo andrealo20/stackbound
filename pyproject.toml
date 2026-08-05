@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stackbound"
+version = "0.1.0"
+description = "Provable worst-case stack bounds for Cortex-M firmware, with interrupt preemption and indirect calls"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Andrea Loroni" }]
+keywords = ["cortex-m", "embedded", "static-analysis", "stack", "firmware", "arm", "elf", "dwarf"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Embedded Systems",
+]
+dependencies = ["pyelftools>=0.29", "capstone>=5.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "matplotlib>=3.5", "ruff>=0.4"]
+
+[project.scripts]
+stackbound = "stackbound.cli:main"
+
+[tool.setuptools]
+packages = ["stackbound"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
