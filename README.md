@@ -213,25 +213,6 @@ docs/design.md   derivation, hand-check against the disassembly, mistakes made
 results/         results.json and the figures generated from it
 ```
 
-## Milestones
-
-* **M0** — ELF and DWARF front end: functions, sections, vector table, canonical
-  type signatures, address-taken scan over every allocated section.
-* **M1** — Thumb-2 decoder and SP abstract interpretation. Per-function CFG,
-  forward fixpoint, per-call-site depth rather than per-function maximum.
-* **M2** — Benchmark firmware and measurement harness. Six bare-metal C99 cases
-  that paint their own stack and report the watermark over semihosting.
-* **M3** — Indirect resolution: the four tiers and the dataflow behind them.
-* **M4** — Exception model: priority grouping, preemption chains, frame sizes,
-  verified against exhaustive enumeration.
-* **M5** — Whole-program bounds: call graph, Tarjan SCC, recursion annotations,
-  worst-path reconstruction.
-* **M6** — Validation and ablation: `tools/validate.py` runs every case in QEMU
-  and re-analyses it in four modes; `tools/sabotage.py` mutates the analyser and
-  checks the suite notices.
-* **M7** — CI gate: `stackbound check` compares the bound against the stack
-  region from the linker script and fails the build if the firmware cannot be
-  shown to fit.
 
 ## Checking that the tests have teeth
 
