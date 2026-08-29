@@ -26,12 +26,15 @@ a loop still be known at a call site inside the loop.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 
 from capstone.arm_const import ARM_OP_IMM, ARM_OP_MEM, ARM_OP_REG, ARM_REG_PC, ARM_REG_SP
 
 from .elfinfo import ElfInfo, GlobalVar
 from .thumb import CallSite, FunctionAnalysis
+
+logger = logging.getLogger(__name__)
 
 TIERS = ("literal", "table", "typed", "any", "manual")
 
@@ -149,6 +152,11 @@ class IndirectResolver:
                     if merged != old:
                         state_in[s] = merged
                         work.append(s)
+        if work and guard >= 20000:
+            logger.warning(
+                f"Dataflow analysis did not converge for {fa.fn.name} after {guard} iterations; "
+                "indirect call resolution may be incomplete"
+            )
         return state_in
 
     def _transfer(self, insn, state: dict[int, Value], fa: FunctionAnalysis) -> dict[int, Value]:

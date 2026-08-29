@@ -106,11 +106,13 @@ def main() -> int:
         for desc, rel, old, new in MUTATIONS:
             path = os.path.join(ROOT, rel)
             shutil.copy2(path, os.path.join(backup, os.path.basename(rel)))
-            src = open(path, encoding="utf-8").read()
+            with open(path, encoding="utf-8") as fh:
+                src = fh.read()
             if old not in src:
                 print(f"! mutation text not found in {rel}: {desc}")
                 return 1
-            open(path, "w", encoding="utf-8").write(src.replace(old, new, 1))
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(src.replace(old, new, 1))
             try:
                 passed, failed = run_tests()
             finally:

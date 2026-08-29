@@ -53,23 +53,29 @@ def build() -> None:
 
 def measure(elf: str, timeout: int = 60) -> int:
     """Run the firmware and return the stack watermark it measured."""
-    proc = subprocess.run(
-        [
-            QEMU,
-            "-M",
-            MACHINE,
-            "-cpu",
-            CPU,
-            "-nographic",
-            "-semihosting-config",
-            "enable=on,target=native",
-            "-kernel",
-            elf,
-        ],
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-    )
+    try:
+        proc = subprocess.run(
+            [
+                QEMU,
+                "-M",
+                MACHINE,
+                "-cpu",
+                CPU,
+                "-nographic",
+                "-semihosting-config",
+                "enable=on,target=native",
+                "-kernel",
+                elf,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as e:
+        raise RuntimeError(
+            f"QEMU timeout after {timeout}s running {elf} (system may be slow). "
+            f"Increase --timeout if needed."
+        ) from e
     out = proc.stdout + proc.stderr
     m = re.search(r"measured_stack_bytes=(\d+)", out)
     if not m:
