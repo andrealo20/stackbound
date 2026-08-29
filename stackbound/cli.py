@@ -80,37 +80,37 @@ def main(argv: list[str] | None = None) -> int:
         if args.fpu:
             opts.fpu = True
 
-    elf = ElfInfo(args.elf)
-    result = analyse(elf, opts)
+    with ElfInfo(args.elf) as elf:
+        result = analyse(elf, opts)
 
-    try:
-        if args.json:
-            print(json.dumps(to_dict(result), indent=2))
-        else:
-            print(render(result, verbose=args.verbose))
-    except BrokenPipeError:  # piped into head, or similar
-        return EXIT_OK
+        try:
+            if args.json:
+                print(json.dumps(to_dict(result), indent=2))
+            else:
+                print(render(result, verbose=args.verbose))
+        except BrokenPipeError:  # piped into head, or similar
+            return EXIT_OK
 
-    if args.cmd == "check":
-        if result.unbounded and not args.allow_unbounded:
-            if not args.json:
-                print("\nFAIL: unbounded stack usage", file=sys.stderr)
-            return EXIT_UNBOUNDED
-        size = result.stack_size
-        if size is None:
-            print(
-                "\nFAIL: no stack size (give --stack-size or _stack_top/_stack_bottom)",
-                file=sys.stderr,
-            )
-            return EXIT_OVERFLOW
-        if result.total > size:
-            if not args.json:
+        if args.cmd == "check":
+            if result.unbounded and not args.allow_unbounded:
+                if not args.json:
+                    print("\nFAIL: unbounded stack usage", file=sys.stderr)
+                return EXIT_UNBOUNDED
+            size = result.stack_size
+            if size is None:
                 print(
-                    f"\nFAIL: bound {result.total} exceeds stack region {size} by "
-                    f"{result.total - size} bytes",
+                    "\nFAIL: no stack size (give --stack-size or _stack_top/_stack_bottom)",
                     file=sys.stderr,
                 )
-            return EXIT_OVERFLOW
+                return EXIT_OVERFLOW
+            if result.total > size:
+                if not args.json:
+                    print(
+                        f"\nFAIL: bound {result.total} exceeds stack region {size} by "
+                        f"{result.total - size} bytes",
+                        file=sys.stderr,
+                    )
+                return EXIT_OVERFLOW
     return EXIT_OK
 
 

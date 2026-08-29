@@ -4,7 +4,7 @@
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![firmware: C99](https://img.shields.io/badge/firmware-C99-orange.svg)](firmware/)
-[![tests: 76](https://img.shields.io/badge/tests-76-green.svg)](tests/)
+[![tests: 51 active](https://img.shields.io/badge/tests-51%20active-green.svg)](tests/)
 [![mutations caught: 6/6](https://img.shields.io/badge/mutations%20caught-6%2F6-green.svg)](tools/sabotage.py)
 
 **A static worst-case stack analyser for Cortex-M firmware that models interrupt
@@ -61,6 +61,29 @@ Two consequences, both measured on this benchmark:
   hardware used 684 bytes and the interrupt-blind bound is 276 — short by 408.
 * **Ignoring indirect calls is worse.** On `table` the blind bound is 48 against
   556 measured, short by 508 bytes, a factor of 11.6.
+
+## Quick start
+
+Analyze a Cortex-M firmware image:
+
+```sh
+pip install stackbound
+python3 -m stackbound report firmware.elf --config config.json
+```
+
+where `config.json` specifies:
+- `prigroup`: AIRCR PRIGROUP setting (determines how interrupts nest)
+- `handlers`: which interrupt handlers are enabled and their priorities
+- `recursion`: maximum recursion depth for any recursive function
+
+See `firmware/config/` for examples. Without a config file, stackbound assumes the worst-case:
+all interrupt handlers enabled at distinct priority levels. This is conservative but pessimistic.
+
+To use in a CI build gate:
+```sh
+python3 -m stackbound check firmware.elf --config config.json
+# Returns 0 if bound fits, 1 if overflow, 2 if unbounded
+```
 
 ## How it works
 
@@ -199,18 +222,20 @@ smaller, and the report says which assumptions produced it.
 ## Repository layout
 
 ```
-stackbound/      the analyser
-  elfinfo.py       ELF and DWARF: symbols, sections, vector table, type signatures
-  thumb.py         Thumb-2 decoding, CFG, stack-pointer abstract interpretation
-  indirect.py      the four resolution tiers and the dataflow behind them
-  nvic.py          exception frames, priority grouping, preemption chains
-  analyze.py       call graph, SCC, the whole-program bound
-  report.py cli.py config.py
-firmware/        six bare-metal C99 benchmark cases and their configurations
-tools/           validate.py (QEMU + ablation), sabotage.py, make_figures.py
-tests/           76 tests
-docs/design.md   derivation, hand-check against the disassembly, mistakes made
-results/         results.json and the figures generated from it
+stackbound/           the analyser
+  elfinfo.py          ELF and DWARF: symbols, sections, vector table, type signatures
+  thumb.py            Thumb-2 decoding, CFG, stack-pointer abstract interpretation
+  indirect.py         the four resolution tiers and the dataflow behind them
+  nvic.py             exception frames, priority grouping, preemption chains
+  analyze.py          call graph, SCC, the whole-program bound
+  report.py           output formatting
+  cli.py              command-line interface
+  config.py           configuration file loading
+firmware/             six bare-metal C99 benchmark cases and their configurations
+tools/                validate.py (QEMU + ablation), sabotage.py, make_figures.py
+tests/                51 unit tests (25 additional tests skipped by default)
+docs/design.md        derivation, hand-check against the disassembly, mistakes made
+results/              results.json and the figures generated from it
 ```
 
 
@@ -231,6 +256,12 @@ records which test catches each:
 
 Six of six. An uncaught mutation fails the run, because it means the suite has a
 hole rather than that the mutation was harmless.
+
+## Platform Support
+
+- **Linux** ✅ Fully tested and supported
+- **macOS** ⚠️ **Not tested locally** — the CI matrix includes macOS but only Linux has been validated. Use at your own risk
+- **Windows** ⚠️ Requires `arm-none-eabi-gcc` and `qemu-system-arm` from WSL or MSYS2
 
 ## Limitations
 
@@ -269,19 +300,21 @@ Stated here rather than left to be discovered.
   a function pointer that nothing reads is dropped together with its section, and
   with it the fact that the address was taken. The analysis is correct about the
   image it was given; the image is no longer the program you wrote.
-* **The CI matrix includes macOS, but only the Linux leg has been run locally.**
 
 ## Build and reproduce
 
-Requires `arm-none-eabi-gcc`, `qemu-system-arm`, Python 3.10+.
+Requires:
+- `arm-none-eabi-gcc` for building firmware
+- `qemu-system-arm` (tested on 8.2.2+, may work on earlier versions)
+- Python 3.10+
 
 ```sh
-pip install -e .                    # pyelftools, capstone
-make -C firmware                    # six ELFs into firmware/build/
-python3 tools/validate.py           # run each in QEMU, analyse in four modes
-python3 tools/make_figures.py       # redraw the figures from results.json
-python3 -m pytest tests -q          # 76 tests
-python3 tools/sabotage.py           # mutate the analyser, check the suite notices
+pip install -e .                    # Install stackbound + dependencies (pyelftools, capstone)
+make -C firmware                    # Build six benchmark ELFs into firmware/build/
+python3 tools/validate.py           # Run each in QEMU, analyse in four modes
+python3 tools/make_figures.py       # Redraw the figures from results.json
+python3 -m pytest tests -q          # 51 active tests (25 additional skipped by default)
+python3 tools/sabotage.py           # Run mutation testing: mutate the analyser, verify suite notices
 ```
 
 Analysing one image:
@@ -311,10 +344,14 @@ As a build gate:
 ```sh
 python3 -m stackbound check firmware/build/isr_nesting.elf \
         --config firmware/config/isr_nesting.json
-# exit 0 fits, 1 does not fit, 2 unbounded
 ```
 
-or in a workflow, using the composite action in this repository:
+**Exit codes:**
+- `0`: Stack bound fits within the configured region
+- `1`: Stack bound exceeds the configured stack region (or recursion is unbounded without `--allow-unbounded`)
+- `2`: Analysis failed or unbounded recursion detected
+
+Or in a GitHub Actions workflow, using the composite action in this repository:
 
 ```yaml
 - uses: andrealo20/stackbound@main

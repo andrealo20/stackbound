@@ -19,8 +19,13 @@ from .analyze import Options
 
 
 def load(path: str) -> dict[str, Any]:
-    with open(path, encoding="utf-8") as fh:
-        return json.load(fh)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON in configuration file {path}: {e}") from e
+    except FileNotFoundError as e:
+        raise ValueError(f"Configuration file not found: {path}") from e
 
 
 def to_options(cfg: dict[str, Any], base: Options) -> Options:

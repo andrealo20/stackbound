@@ -89,7 +89,7 @@ def _type_of(die):
         return None
     try:
         return die.get_DIE_from_attribute("DW_AT_type")
-    except Exception:
+    except (AttributeError, KeyError):
         return None
 
 
@@ -156,22 +156,33 @@ class ElfInfo:
     def __init__(self, path: str):
         self.path = path
         self._fh = open(path, "rb")
-        self.elf = ELFFile(self._fh)
+        try:
+            self.elf = ELFFile(self._fh)
 
-        self.sections: list[Section] = []
-        self.functions: dict[int, Function] = {}  # addr (even) -> Function
-        self.by_name: dict[str, Function] = {}
-        self.globals: dict[int, GlobalVar] = {}  # addr -> GlobalVar
-        self.signatures: dict[str, str] = {}  # function name -> signature
-        self.address_taken: set[int] = set()
-        self.taken_by_vectors: set[int] = set()
-        self.taken_by_code: set[int] = set()
-        self.entry = self.elf.header["e_entry"] & ~1
+            self.sections: list[Section] = []
+            self.functions: dict[int, Function] = {}  # addr (even) -> Function
+            self.by_name: dict[str, Function] = {}
+            self.globals: dict[int, GlobalVar] = {}  # addr -> GlobalVar
+            self.signatures: dict[str, str] = {}  # function name -> signature
+            self.address_taken: set[int] = set()
+            self.taken_by_vectors: set[int] = set()
+            self.taken_by_code: set[int] = set()
+            self.entry = self.elf.header["e_entry"] & ~1
 
-        self._load_sections()
-        self._load_symbols()
-        self._load_dwarf()
-        self._scan_address_taken()
+            self._load_sections()
+            self._load_symbols()
+            self._load_dwarf()
+            self._scan_address_taken()
+        except Exception:
+            self._fh.close()
+            raise
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
 
     # -- sections ---------------------------------------------------------
     def _load_sections(self) -> None:
@@ -278,7 +289,8 @@ class ElfInfo:
         for cu in dwarf.iter_CUs():
             try:
                 dies = list(cu.iter_DIEs())
-            except Exception:
+            except (AttributeError, KeyError, ValueError):
+                # Skip CUs with malformed DWARF
                 continue
             for die in dies:
                 if die.tag == "DW_TAG_subprogram" and "DW_AT_low_pc" in die.attributes:
