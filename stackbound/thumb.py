@@ -113,7 +113,7 @@ def sp_delta(insn) -> tuple[int, bool]:
     """Return ``(bytes_allocated, understood)``.
 
     Positive means the instruction *grows* the stack (SP decreases).  The second
-    element is False when the instruction writes SP in a way we do not model —
+    element is False when the instruction writes SP in a way we do not model,
     the caller must then treat the function conservatively.
     """
     try:

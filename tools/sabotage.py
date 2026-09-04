@@ -2,7 +2,7 @@
 """Break the analyser on purpose and check that the test suite notices.
 
 A test that has never been seen to fail is not yet a test.  Each mutation below
-is a plausible mistake — the kind a reviewer would have to spot by reading —
+is a plausible mistake, the kind a reviewer would have to spot by reading,
 and for each one this script records which tests catch it.  A mutation that
 nothing catches is a hole in the suite, and the run fails.
 

@@ -4,8 +4,8 @@ Two things about a firmware image cannot be read from the binary: which
 interrupts are actually enabled and at what priority (both are set by code at
 run time), and how deep a recursion can go.  stackbound never guesses either.
 
-Without a configuration it assumes the worst that the hardware allows — every
-vector slot enabled, every priority distinct, so everything can nest — and
+Without a configuration it assumes the worst that the hardware allows, every
+vector slot enabled, every priority distinct, so everything can nest, and
 reports recursion as unbounded.  A configuration file replaces those worst cases
 with what the firmware actually does.
 """

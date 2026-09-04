@@ -2,8 +2,8 @@
 
 The formula says: one handler per preemption level, take the most expensive at
 each, sum them.  The brute force enumerates every admissible nesting order and
-takes the maximum.  If the formula were wrong in either direction — missing a
-chain, or allowing one the hardware forbids — these two disagree.
+takes the maximum.  If the formula were wrong in either direction, missing a
+chain, or allowing one the hardware forbids, these two disagree.
 """
 
 import random
