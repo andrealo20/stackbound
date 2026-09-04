@@ -61,7 +61,8 @@ def figure_soundness(data, out):
     ax1.bar([i - w / 2 for i in x], measured, w, label="measured in QEMU", color=MEASURED, zorder=3)
     ax1.bar([i + w / 2 for i in x], full, w, label="stackbound", color=BOUND, zorder=3)
     for i, (m, b) in enumerate(zip(measured, full, strict=True)):
-        ax1.text(i + w / 2, b + 20, f"{b / m:.2f}x", ha="center", fontsize=8, color=BOUND)
+        label = f"{b / m:.2f}x" if m else "n/a"
+        ax1.text(i + w / 2, b + 20, label, ha="center", fontsize=8, color=BOUND)
     ax1.set_ylabel("stack, bytes")
     ax1.set_title(
         "Sound in every case, and tight in five of six", fontsize=11, color=INK, loc="left"

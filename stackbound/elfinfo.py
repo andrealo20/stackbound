@@ -317,7 +317,10 @@ class ElfInfo:
         for sec in self.sections:
             if not sec.data:
                 continue
-            for off in range(0, len(sec.data) - 3, 4):
+            # A pointer is 4-byte aligned in memory, which is an offset into the
+            # section only when the section itself is aligned.
+            first = -sec.addr % 4
+            for off in range(first, len(sec.data) - 3, 4):
                 word = struct.unpack("<I", sec.data[off : off + 4])[0]
                 if word & 1 and (word & ~1) in starts:
                     target = word & ~1

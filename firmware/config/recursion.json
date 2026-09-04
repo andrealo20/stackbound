@@ -6,7 +6,6 @@
   },
   "recursion": {
     "descend": 7,
-    "ping": 5,
-    "pong": 5
+    "ping": 5
   }
 }

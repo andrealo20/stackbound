@@ -5,7 +5,9 @@
 
 ``check`` is the form meant for CI: it compares the bound against the stack
 region declared by the linker script and fails the build if the firmware cannot
-be shown to fit.
+be shown to fit.  It only ever exits 0 when the number it compared is a bound;
+when it is merely a lower bound, or when there is nothing to compare against, it
+says so and exits non-zero.
 """
 
 from __future__ import annotations
@@ -15,13 +17,14 @@ import json
 import sys
 
 from . import config as config_mod
-from .analyze import INDIRECT_MODES, Options, analyse
+from .analyze import INDIRECT_MODES, Options, Result, analyse
 from .elfinfo import ElfInfo
 from .report import render, to_dict
 
 EXIT_OK = 0
 EXIT_OVERFLOW = 1
 EXIT_UNBOUNDED = 2
+EXIT_INCOMPLETE = 3  # no bound was established: nothing to compare, or a lower bound
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -55,9 +58,55 @@ def _build_parser() -> argparse.ArgumentParser:
             sp.add_argument(
                 "--allow-unbounded",
                 action="store_true",
-                help="do not fail when a recursive component has no stated depth",
+                help="report an unbounded component as a lower bound (exit 3) instead "
+                "of failing outright (exit 2); it can still exit 1 if even the lower "
+                "bound does not fit",
             )
     return p
+
+
+def check(result: Result, allow_unbounded: bool = False, quiet: bool = False) -> int:
+    """Exit code for ``stackbound check``, and the reasons behind it on stderr."""
+
+    def say(message: str) -> None:
+        if not quiet:
+            print(message, file=sys.stderr)
+
+    reasons: list[str] = []
+    if result.reachable_unbounded:
+        reasons.append("unbounded stack usage: " + ", ".join(result.reachable_unbounded))
+    if result.reachable_unknown_callees:
+        reasons.append(
+            "calls a target that is not in the call graph: "
+            + ", ".join(result.reachable_unknown_callees)
+        )
+
+    if reasons and not allow_unbounded:
+        for reason in reasons:
+            say(f"\nFAIL: {reason}")
+        return EXIT_UNBOUNDED
+
+    size = result.stack_size
+    if size is None:
+        say("\nFAIL: no stack size (give --stack-size or _stack_top/_stack_bottom)")
+        return EXIT_INCOMPLETE
+
+    # With --allow-unbounded the total is the depth of a single activation of
+    # each unbounded component, so it is a lower bound.  Exceeding the region is
+    # still conclusive; fitting inside it is not.
+    if result.total > size:
+        say(
+            f"\nFAIL: bound {result.total} exceeds stack region {size} by "
+            f"{result.total - size} bytes"
+        )
+        return EXIT_OVERFLOW
+
+    if reasons:
+        for reason in reasons:
+            say(f"\nINCOMPLETE: {reason}")
+        say(f"INCOMPLETE: {result.total} bytes is a lower bound, not a bound")
+        return EXIT_INCOMPLETE
+    return EXIT_OK
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -92,25 +141,7 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_OK
 
     if args.cmd == "check":
-        if result.unbounded and not args.allow_unbounded:
-            if not args.json:
-                print("\nFAIL: unbounded stack usage", file=sys.stderr)
-            return EXIT_UNBOUNDED
-        size = result.stack_size
-        if size is None:
-            print(
-                "\nFAIL: no stack size (give --stack-size or _stack_top/_stack_bottom)",
-                file=sys.stderr,
-            )
-            return EXIT_OVERFLOW
-        if result.total > size:
-            if not args.json:
-                print(
-                    f"\nFAIL: bound {result.total} exceeds stack region {size} by "
-                    f"{result.total - size} bytes",
-                    file=sys.stderr,
-                )
-            return EXIT_OVERFLOW
+        return check(result, allow_unbounded=args.allow_unbounded, quiet=args.json)
     return EXIT_OK
 
 

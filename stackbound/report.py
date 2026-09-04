@@ -4,8 +4,25 @@ from __future__ import annotations
 
 from typing import Any
 
-from .analyze import Result
+from .analyze import FunctionBound, Result
 from .nvic import frame_size
+
+
+def _function_keys(bounds: list[FunctionBound]) -> dict[str, FunctionBound]:
+    """One key per function, even when two of them share a name.
+
+    Two ``static`` functions with the same name in different translation units
+    are different functions with different bounds.  Keying on the name alone
+    would let one overwrite the other and disappear from the output, so a
+    repeated name carries its address.
+    """
+    repeated = {fb.name for fb in bounds}
+    repeated = {name for name in repeated if sum(1 for fb in bounds if fb.name == name) > 1}
+    out: dict[str, FunctionBound] = {}
+    for fb in bounds:
+        key = f"{fb.name}@0x{fb.addr:08x}" if fb.name in repeated else fb.name
+        out[key] = fb
+    return out
 
 
 def to_dict(result: Result) -> dict[str, Any]:
@@ -44,9 +61,19 @@ def to_dict(result: Result) -> dict[str, Any]:
             for fname, r in result.resolutions
         ],
         "flagged": result.flagged,
+        "reachable_unbounded": result.reachable_unbounded,
+        "unknown_callees": {
+            name: [f"0x{a:08x}" for a in addrs]
+            for name, addrs in sorted(result.unknown_callees.items())
+        },
         "functions": {
-            fb.name: {"local": fb.local, "bound": fb.bound, "unbounded": fb.unbounded}
-            for fb in result.bounds.values()
+            key: {
+                "address": f"0x{fb.addr:08x}",
+                "local": fb.local,
+                "bound": fb.bound,
+                "unbounded": fb.unbounded,
+            }
+            for key, fb in _function_keys(list(result.bounds.values())).items()
         },
     }
 
@@ -78,6 +105,16 @@ def render(result: Result, verbose: bool = False) -> str:
         add("")
         add("UNBOUNDED: " + ", ".join(result.unbounded))
         add("  no finite bound exists without a recursion depth; see 'recursion' in the config")
+        unreached = sorted(set(result.unbounded) - set(result.reachable_unbounded))
+        if unreached:
+            add("  no root reaches, so 'check' does not fail on: " + ", ".join(unreached))
+
+    if result.unknown_callees:
+        add("")
+        add("UNRESOLVED CALLS: the bound does not cover these call sites")
+        for name, addrs in sorted(result.unknown_callees.items()):
+            add(f"  {name:<24} " + ", ".join(f"0x{a:08x}" for a in addrs))
+        add("  a target with no function symbol, usually assembly with no .size directive")
 
     add("")
     add("worst path: " + " -> ".join(result.worst_path))
@@ -102,7 +139,7 @@ def render(result: Result, verbose: bool = False) -> str:
 
     if result.flagged:
         add("")
-        add("functions the decoder could not fully interpret:")
+        add("functions the analysis could not take at face value:")
         for name, flags in sorted(result.flagged.items()):
             add(f"  {name:<24} {', '.join(flags)}")
 

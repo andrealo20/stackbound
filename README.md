@@ -4,7 +4,7 @@
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![firmware: C99](https://img.shields.io/badge/firmware-C99-orange.svg)](firmware/)
-[![tests: 76](https://img.shields.io/badge/tests-76-green.svg)](tests/)
+[![tests: 92](https://img.shields.io/badge/tests-92-green.svg)](tests/)
 [![mutations caught: 6/6](https://img.shields.io/badge/mutations%20caught-6%2F6-green.svg)](tools/sabotage.py)
 
 **A static worst-case stack analyser for Cortex-M firmware that models interrupt
@@ -68,7 +68,7 @@ Two consequences, both measured on this benchmark:
 
 For a function $f$ with local allocation $L(f)$ and call sites $c$:
 
-$$ S(f) = \max\Big( L(f),\; \max_{c \,\in\, \mathrm{calls}(f)} \big( d(c) + \max_{g \,\in\, T(c)} S(g) \big) \Big) $$
+$$ S(f) = \max\Big( L(f), \max_{c \in \mathrm{calls}(f)} \big( d(c) + \max_{g \in T(c)} S(g) \big) \Big) $$
 
 $d(c)$ is the stack already in use at the call site and $T(c)$ the set of
 functions the call can reach. Using $d(c)$ rather than $L(f)$ is what keeps the
@@ -81,10 +81,12 @@ Thumb-2 decoder is for.
 A cycle has no finite bound. Given a stated number of activations $k$ for a
 strongly connected component:
 
-$$ S(\mathrm{SCC}) = (k-1)\,\max_{\text{back edges}} d \;+\; \max_{f \,\in\, \mathrm{SCC}} S_{\mathrm{exit}}(f) $$
+$$ S(\mathrm{SCC}) = (k-1) \max_{\text{back edges}} d + \max_{f \in \mathrm{SCC}} S_{\mathrm{exit}}(f) $$
 
 $k-1$ activations each reach their deepest recursion site, and the last one runs
-to its own maximum. Without $k$ the component is reported unbounded.
+to its own maximum. Without $k$ the component is reported unbounded. $k$ counts
+activations of the whole component and not of any one function in it: `ping(4)`
+alternating with `pong` is five activations, not three of `ping`.
 
 The whole-program bound is the thread-mode depth plus the exception chain below,
 because an interrupt can arrive at the deepest point of thread mode.
@@ -122,7 +124,7 @@ hardware-pushed frame, and can itself be preempted. Two handlers at the same
 preemption priority never nest, so a chain holds at most one handler per level
 and the worst case is
 
-$$ S_{\mathrm{exc}} = \sum_{\ell \,\in\, \mathrm{levels}} \;\max_{h \,\in\, \ell} \big( F + \mathrm{align} + S(h) \big) $$
+$$ S_{\mathrm{exc}} = \sum_{\ell \in \mathrm{levels}} \max_{h \in \ell} \big( F + \mathrm{align} + S(h) \big) $$
 
 $F$ is the hardware-stacked frame: $32$ bytes for r0-r3, r12, LR, PC and xPSR, or
 $104$ when an FP context is active. The extended frame counts even under lazy
@@ -149,6 +151,17 @@ than quietly assuming interrupts are off.
 * A recursive component has no finite bound; without a stated depth it is
   reported as **unbounded** and `stackbound check` fails. A tool that returns a
   number here is lying.
+* A call whose target is not a function in the image (a symbol with no size,
+  which is what hand-written assembly without a `.size` directive produces)
+  cannot be charged to anything. Dropping it silently would make the bound
+  *smaller*, so the caller is flagged `unknown_callee`, the addresses are listed
+  in the report, and `check` refuses if the entry point or an enabled handler can
+  reach it.
+* Both internal fixpoints say so when they stop early. If the literal-pool set
+  has not settled after three decodes the function is flagged `decode_unstable`
+  and falls back to the sum of every allocation in it; if the pointer dataflow
+  hits its step ceiling the function is flagged `dataflow_incomplete` and each of
+  its indirect calls falls back to the `any` tier.
 * Literal pools are located and skipped before anything is interpreted, because a
   `.word` decoded as an instruction that happens to write `SP` corrupts
   everything downstream.
@@ -175,7 +188,7 @@ time. Rather than guess, `stackbound` takes them from a configuration file:
     "TIM2_IRQHandler": { "priority": 64 },
     "USART1_IRQHandler": { "priority": 128 }
   },
-  "recursion": { "parse_node": 8 },
+  "recursion": { "parse_node": 8, "ping": 5 },
   "indirect_targets": { "0x08001c42": ["on_rx", "on_tx"] },
   "any_includes_vectors": false
 }
@@ -187,7 +200,7 @@ time. Rather than guess, `stackbound` takes them from a configuration file:
 | `fpu` | assume an extended (FP) exception frame | `false` |
 | `entry` | thread-mode root | vector 1 |
 | `handlers` | per handler: raw 8-bit `priority`, and `enabled` | every vector slot enabled, every priority unknown |
-| `recursion` | maximum activations per recursive function | none, so cycles are unbounded |
+| `recursion` | total activations of a recursive component, stated on any one of its members | none, so cycles are unbounded |
 | `indirect_targets` | manual callee list for a call site address | resolved automatically |
 | `any_includes_vectors` | let unresolved calls reach vector-table-only functions | `false` |
 
@@ -195,6 +208,18 @@ Every default is the conservative one. With no configuration at all, every vecto
 slot is assumed live at a distinct priority — so all of them can nest — and any
 recursion makes the run unbounded. The configuration only ever makes the number
 smaller, and the report says which assumptions produced it.
+
+The one entry that is easy to get wrong is `recursion`. The number is the total
+number of activations the whole recursive component can have on the stack at
+once, not a count per function. `ping` calling `pong` calling `ping` until
+`ping(4)` returns is five activations of one two-function component: the entry
+is `{"ping": 5}`, not `{"ping": 3, "pong": 2}`. Naming several members of the
+same component gets the component flagged `recursion_depth_ambiguous`, because
+numbers that add up to more than the largest of them are what a per-function
+count looks like. The flag comes with the pessimistic reading, their sum: it is
+exactly right if they were per-function counts, and only too large if the
+component total was repeated, whereas taking the largest would be short of the
+truth in the first case.
 
 ## Repository layout
 
@@ -208,7 +233,7 @@ stackbound/      the analyser
   report.py cli.py config.py
 firmware/        six bare-metal C99 benchmark cases and their configurations
 tools/           validate.py (QEMU + ablation), sabotage.py, make_figures.py
-tests/           76 tests
+tests/           92 tests
 docs/design.md   derivation, hand-check against the disassembly, mistakes made
 results/         results.json and the figures generated from it
 ```
@@ -246,6 +271,24 @@ Stated here rather than left to be discovered.
   a real Cortex-M3 execution, but on programs whose call graphs are small enough
   to check by hand — which is also why the hand-check in `docs/design.md` is
   possible.
+* **The measured column is itself a lower bound.** The firmware paints its stack
+  and scans for the first word that is no longer the pattern, which measures how
+  far the stack was *written*, not how far `SP` travelled. A function that
+  allocates 256 bytes and writes 128 of them measures 128. The two columns agree
+  on this benchmark because every case hands its buffer to `sb_consume`, which
+  touches every word: by construction, not by luck. A bound below the watermark
+  is conclusively wrong; a bound above it is not thereby proved right.
+* **A call to a symbol with no size is not a call to a function.** Hand-written
+  assembly without a `.size` directive gives a zero-sized `STT_FUNC` symbol,
+  which has no body to analyse. The call is reported and fails `check` rather
+  than being dropped, but the bound cannot cover the callee until the symbol has
+  a size.
+* **`mov sp, rN` cannot be bounded.** Setting `SP` from a register whose value
+  the analysis does not have makes the function unbounded, flagged
+  `sp_from_register`. GCC's frame-pointer epilogue is exactly this instruction,
+  so a function compiled with a frame pointer hits it; `-fomit-frame-pointer`,
+  which is the default at `-O1` and above, avoids it. This is a refusal, not a
+  gap to be closed: the value could be anything.
 * **Indirect resolution covers globals and const tables, not struct members.** A
   pointer loaded from a field of a struct falls to the `any` tier. Typed
   resolution through struct members needs type propagation the dataflow does not
@@ -280,7 +323,7 @@ pip install -e .                    # pyelftools, capstone
 make -C firmware                    # six ELFs into firmware/build/
 python3 tools/validate.py           # run each in QEMU, analyse in four modes
 python3 tools/make_figures.py       # redraw the figures from results.json
-python3 -m pytest tests -q          # 76 tests
+python3 -m pytest tests -q          # 92 tests
 python3 tools/sabotage.py           # mutate the analyser, check the suite notices
 ```
 
@@ -311,8 +354,21 @@ As a build gate:
 ```sh
 python3 -m stackbound check firmware/build/isr_nesting.elf \
         --config firmware/config/isr_nesting.json
-# exit 0 fits, 1 does not fit, 2 unbounded
+# exit 0 fits
+#      1 does not fit
+#      2 no bound: a reachable component is unbounded, or calls a target that is
+#        not in the call graph
+#      3 nothing to compare against, or a number that is only a lower bound
 ```
+
+`check` considers only what the entry point and the enabled handlers can reach,
+so recursion in code nothing calls does not fail the build. Exit 3 covers the two
+cases where the comparison could not be made honestly: no stack region was given
+and none could be read from the image, or `--allow-unbounded` was passed, in
+which case the total is the cost of a single activation of each unbounded
+component and therefore a lower bound. `--allow-unbounded` never exits 0; it
+turns a refusal into a number you have been told not to trust, and it still exits
+1 if even that number does not fit.
 
 or in a workflow, using the composite action in this repository:
 

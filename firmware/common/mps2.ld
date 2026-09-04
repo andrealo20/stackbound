@@ -26,6 +26,12 @@ SECTIONS
     . = ALIGN(4);
   } > CODE
 
+  /* .data has no load address in CODE and Reset_Handler copies nothing into it,
+   * so these initialisers only reach RAM because QEMU loads every PT_LOAD
+   * segment straight to its virtual address.  On real hardware the section
+   * needs AT> CODE and a copy loop at reset.  Left as it is on purpose: the
+   * stack numbers in results/results.json were measured with this startup path,
+   * and changing it would invalidate them. */
   .data : { *(.data*) . = ALIGN(4); } > RAM
   .bss  : { __bss_start = .; *(.bss*) *(COMMON) . = ALIGN(4); __bss_end = .; } > RAM
 

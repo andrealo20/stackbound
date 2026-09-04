@@ -84,7 +84,10 @@ class FunctionAnalysis:
 
     @property
     def conservative(self) -> bool:
-        return bool(self.flags & {"incomplete_cfg", "unhandled_sp_write", "inconsistent_sp"})
+        return bool(
+            self.flags
+            & {"incomplete_cfg", "unhandled_sp_write", "inconsistent_sp", "decode_unstable"}
+        )
 
 
 def _disassembler() -> Cs:
@@ -225,6 +228,26 @@ def _it_mask(insns: list[object]) -> set[int]:
     return conditional
 
 
+def _literal_width(insn) -> int:
+    """Bytes a PC-relative load takes out of the literal pool.
+
+    ``ldrd`` is always two words.  ``vldr`` depends on the destination register:
+    ``vldr d0, [pc, #n]`` loads eight bytes, ``vldr s0, [pc, #n]`` only four.
+    Claiming eight for the single-precision form would hide the four bytes after
+    the literal, and a real 32-bit instruction sitting there would be skipped.
+    """
+    mnemonic = insn.mnemonic.lower()
+    if mnemonic.startswith("ldrd"):
+        return 8
+    if mnemonic.startswith("vldr"):
+        ops = insn.operands
+        dst = ops[0] if ops else None
+        if dst is not None and dst.type == ARM_OP_REG:
+            name = insn.reg_name(dst.reg) or ""
+            return 8 if name.startswith("d") else 4
+    return 4
+
+
 def _literal_ranges(insns) -> list[tuple[int, int]]:
     """Byte ranges inside a function that hold literal-pool data, not code.
 
@@ -239,8 +262,7 @@ def _literal_ranges(insns) -> list[tuple[int, int]]:
             if op.type == ARM_OP_MEM and op.mem.base == ARM_REG_PC:
                 base = (insn.address + 4) & ~3
                 lit = base + int(op.mem.disp)
-                width = 8 if insn.mnemonic.lower().startswith(("ldrd", "vldr")) else 4
-                ranges.append((lit, lit + width))
+                ranges.append((lit, lit + _literal_width(insn)))
     ranges.sort()
     merged: list[tuple[int, int]] = []
     for start, end in ranges:
@@ -267,23 +289,33 @@ def _decode(md, fn: Function, data: list[tuple[int, int]]) -> list[object]:
     return insns
 
 
-def _decode_stable(md, fn: Function) -> tuple[list[object], list[tuple[int, int]]]:
-    """Decode, find pools, decode again until the pool set stops changing."""
+def _decode_stable(md, fn: Function) -> tuple[list[object], list[tuple[int, int]], bool]:
+    """Decode, find pools, decode again until the pool set stops changing.
+
+    The third element says whether the pool set actually converged.  When it did
+    not, the decode is one of a sequence that never settled and the instructions
+    returned are not trustworthy, so the caller must treat the function
+    conservatively rather than quietly using the last iteration.
+    """
     data: list[tuple[int, int]] = []
     insns = _decode(md, fn, data)
+    stable = False
     for _ in range(3):
         found = [r for r in _literal_ranges(insns) if fn.addr <= r[0] < fn.end]
         if found == data:
+            stable = True
             break
         data = found
         insns = _decode(md, fn, data)
-    return insns, data
+    return insns, data, stable
 
 
 def analyse_function(elf: ElfInfo, fn: Function) -> FunctionAnalysis:
     md = _disassembler()
-    insns, _pools = _decode_stable(md, fn)
+    insns, _pools, stable = _decode_stable(md, fn)
     res = FunctionAnalysis(fn=fn, insns=insns)
+    if not stable:
+        res.flags.add("decode_unstable")
 
     if not insns:
         res.flags.add("no_code")
@@ -302,7 +334,15 @@ def analyse_function(elf: ElfInfo, fn: Function) -> FunctionAnalysis:
         delta, ok = sp_delta(insn)
         if not ok:
             res.flags.add("unhandled_sp_write")
-            if insn.mnemonic.lower().split(".")[0] in ("sub", "subs", "mov", "subw"):
+            m = insn.mnemonic.lower().split(".")[0]
+            if m == "mov":
+                # mov sp, rN: the new SP comes from a register whose value this
+                # analysis does not have.  GCC's frame-pointer epilogue looks
+                # exactly like this, which is why the flag names the form.
+                res.flags.add("sp_from_register")
+                res.unbounded = True
+            elif m in ("sub", "subs", "subw"):
+                res.flags.add("dynamic_allocation")
                 res.unbounded = True
         if delta > 0:
             total_alloc += delta

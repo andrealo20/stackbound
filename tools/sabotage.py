@@ -60,8 +60,8 @@ MUTATIONS: list[tuple[str, str, str, str]] = [
     (
         "decode literal pools as if they were instructions",
         "stackbound/thumb.py",
-        "    insns, _pools = _decode_stable(md, fn)",
-        "    insns = list(md.disasm(fn.code, fn.addr))",
+        "    insns, _pools, stable = _decode_stable(md, fn)",
+        "    insns, _pools, stable = list(md.disasm(fn.code, fn.addr)), [], True",
     ),
     (
         "treat a recursive component as if it were called once",
@@ -73,8 +73,10 @@ MUTATIONS: list[tuple[str, str, str, str]] = [
 
 
 def run_tests() -> tuple[bool, list[str]]:
+    """Run the suite to the end: which tests catch a mutation is the record kept
+    here, and stopping at the first failure would record only one of them."""
     proc = subprocess.run(
-        [sys.executable, "-m", "pytest", "tests", "-q", "--no-header", "-x", "--tb=no"],
+        [sys.executable, "-m", "pytest", "tests", "-q", "--no-header", "--tb=no"],
         cwd=ROOT,
         capture_output=True,
         text=True,

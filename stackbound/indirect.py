@@ -35,6 +35,11 @@ from .thumb import CallSite, FunctionAnalysis
 
 TIERS = ("literal", "table", "typed", "any", "manual")
 
+#: Ceiling on the dataflow fixpoint, so a pathological function cannot hang the
+#: run.  Hitting it means the states are not yet the meet over all predecessors,
+#: which is unsound to believe, so the function falls back to the `any` tier.
+PROPAGATE_STEPS = 20000
+
 
 # ---- abstract values -----------------------------------------------------
 
@@ -113,11 +118,11 @@ class IndirectResolver:
                 self._by_sig.setdefault(sig, []).append(addr)
 
     # -- dataflow ---------------------------------------------------------
-    def _propagate(self, fa: FunctionAnalysis) -> dict[int, dict[int, Value]]:
-        """Register state on entry to each instruction."""
+    def _propagate(self, fa: FunctionAnalysis) -> tuple[dict[int, dict[int, Value]], bool]:
+        """Register state on entry to each instruction, and whether it converged."""
         insns = {i.address: i for i in fa.insns}
         if not insns:
-            return {}
+            return {}, True
         entry = fa.fn.addr
         preds: dict[int, list[int]] = {a: [] for a in insns}
         for a, ss in fa.succs.items():
@@ -127,7 +132,7 @@ class IndirectResolver:
         state_in: dict[int, dict[int, Value]] = {entry: {}}
         work = [entry]
         guard = 0
-        while work and guard < 20000:
+        while work and guard < PROPAGATE_STEPS:
             guard += 1
             addr = work.pop()
             insn = insns.get(addr)
@@ -149,7 +154,7 @@ class IndirectResolver:
                     if merged != old:
                         state_in[s] = merged
                         work.append(s)
-        return state_in
+        return state_in, not work
 
     def _transfer(self, insn, state: dict[int, Value], fa: FunctionAnalysis) -> dict[int, Value]:
         m = insn.mnemonic.lower().split(".")[0]
@@ -239,7 +244,9 @@ class IndirectResolver:
         sites = [c for c in fa.calls if c.is_indirect]
         if not sites:
             return []
-        state_in = self._propagate(fa)
+        state_in, converged = self._propagate(fa)
+        if not converged:
+            fa.flags.add("dataflow_incomplete")
         insn_by_addr = {i.address: i for i in fa.insns}
 
         out: list[Resolution] = []
@@ -260,7 +267,9 @@ class IndirectResolver:
                     if op.type == ARM_OP_REG:
                         reg = op.reg
                         break
-            value = state_in.get(site.addr, {}).get(reg, UNKNOWN) if reg is not None else UNKNOWN
+            value = UNKNOWN
+            if converged and reg is not None:
+                value = state_in.get(site.addr, {}).get(reg, UNKNOWN)
             out.append(self._classify(site, value))
         return out
 

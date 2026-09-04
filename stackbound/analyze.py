@@ -12,7 +12,10 @@ large buffer after its calls have returned never holds both at the same time.
 
 Cycles have no finite bound without extra information, so a recursive component
 is reported as unbounded unless the user states how many activations are
-possible.  With a stated bound $k$ the component costs
+possible.  $k$ counts the activations of the whole strongly connected component,
+not of one of its members: two mutually recursive functions that alternate five
+times are five activations, not five each.  With a stated bound $k$ the component
+costs
 
 $$ (k-1)\\, \\max_{\\text{back edges}} d + \\max_{f \\in \\mathrm{SCC}} S_{\\mathrm{exit}}(f) $$
 
@@ -57,6 +60,7 @@ class FunctionBound:
     unbounded: bool = False
     flags: list[str] = field(default_factory=list)
     via: tuple[int, int] | None = None  # (call site addr, callee addr) on the worst path
+    unknown_callees: list[int] = field(default_factory=list)  # call targets with no function
 
 
 @dataclass
@@ -75,6 +79,33 @@ class Result:
     worst_path: list[str]
     stack_region: tuple[int, int] | None
     options: Options
+    #: functions the entry point or an enabled handler can actually reach
+    reachable: set[int] = field(default_factory=set)
+
+    @property
+    def unknown_callees(self) -> dict[str, list[int]]:
+        """Call targets that were dropped from the call graph, per caller."""
+        out: dict[str, list[int]] = {}
+        for fb in self.bounds.values():
+            if fb.unknown_callees:
+                out.setdefault(fb.name, []).extend(fb.unknown_callees)
+        return {name: sorted(set(addrs)) for name, addrs in out.items()}
+
+    @property
+    def reachable_unbounded(self) -> list[str]:
+        return sorted(
+            {fb.name for addr, fb in self.bounds.items() if fb.unbounded and addr in self.reachable}
+        )
+
+    @property
+    def reachable_unknown_callees(self) -> list[str]:
+        return sorted(
+            {
+                fb.name
+                for addr, fb in self.bounds.items()
+                if fb.unknown_callees and addr in self.reachable
+            }
+        )
 
     @property
     def stack_size(self) -> int | None:
@@ -144,6 +175,30 @@ def _tarjan(nodes: Sequence[int], edges: dict[int, list[int]]) -> list[list[int]
     return out
 
 
+def _stated_activations(names: Sequence[str], recursion: dict[str, int]) -> tuple[int | None, bool]:
+    """Activations stated for a recursive component, and whether they are ambiguous.
+
+    The number is a property of the component, not of one of its members, so it
+    only has to be stated once.  Several members carrying numbers that add up to
+    more than the largest of them is what a per-function count looks like:
+    ``ping`` and ``pong`` alternating five times in total, written as
+    ``{"ping": 3, "pong": 2}``, would otherwise be read as three activations and
+    silently lose two.
+
+    Such a component is flagged, and the sum is used rather than the maximum.
+    The sum is exactly right if the numbers were per function, and merely
+    pessimistic if the component total was repeated on every member; the maximum
+    is short of the truth in the first case, which is the one direction a stack
+    bound may never take.
+    """
+    stated = {name: recursion[name] for name in names if name in recursion}
+    if not stated:
+        return None, False
+    total, largest = sum(stated.values()), max(stated.values())
+    ambiguous = len(names) > 1 and len(stated) > 1 and total > largest
+    return (total if ambiguous else largest), ambiguous
+
+
 def analyse(elf: ElfInfo, opts: Options) -> Result:
     fas: dict[int, FunctionAnalysis] = analyse_all(elf)
     resolver = IndirectResolver(elf, opts.manual_targets, opts.any_includes_vectors)
@@ -152,11 +207,13 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
     # ---- edges ----------------------------------------------------------
     # edge = (call site address, stack depth at the site, callee address)
     edges: dict[int, list[tuple[int, int, int]]] = {}
+    unknown: dict[int, list[int]] = {}
     resolutions: list[tuple[str, Resolution]] = []
     tier_counts: dict[str, int] = {}
 
     for addr, fa in fas.items():
         out: list[tuple[int, int, int]] = []
+        lost: list[int] = []
         res_by_site = {r.site.addr: r for r in resolver.resolve(fa)}
         for site in fa.calls:
             if site.is_indirect:
@@ -167,24 +224,38 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
                 for tgt in _targets(r, opts.indirect_mode, all_taken):
                     if tgt in fas:
                         out.append((site.addr, site.sp_depth, tgt))
+                    else:
+                        lost.append(tgt & ~1)
             elif site.target is not None:
                 callee = elf.function_at(site.target)
                 if callee is not None and callee.addr in fas:
                     out.append((site.addr, site.sp_depth, callee.addr))
+                else:
+                    # A symbol with no size (hand-written assembly without a
+                    # .size directive) is not a function here, so the call has
+                    # no callee to charge.  Dropping it silently would lower the
+                    # bound, so it is recorded instead.
+                    lost.append(site.target & ~1)
         edges[addr] = out
+        if lost:
+            unknown[addr] = sorted(set(lost))
 
     succ = {a: [t for (_, _, t) in e] for a, e in edges.items()}
 
     # ---- costs ----------------------------------------------------------
     bounds: dict[int, FunctionBound] = {}
     for addr, fa in fas.items():
+        flags = set(fa.flags)
+        if addr in unknown:
+            flags.add("unknown_callee")
         bounds[addr] = FunctionBound(
             name=fa.fn.name,
             addr=addr,
             local=fa.local_max,
             bound=fa.local_max,
             unbounded=fa.unbounded,
-            flags=sorted(fa.flags),
+            flags=sorted(flags),
+            unknown_callees=unknown.get(addr, []),
         )
 
     comps = _tarjan(list(fas.keys()), succ)  # already in reverse topological order
@@ -208,11 +279,7 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
             continue
 
         # recursive component
-        k = None
-        for addr in comp:
-            name = bounds[addr].name
-            if name in opts.recursion:
-                k = opts.recursion[name] if k is None else max(k, opts.recursion[name])
+        k, ambiguous = _stated_activations([bounds[a].name for a in comp], opts.recursion)
 
         exit_cost = 0
         back_depth = 0
@@ -234,17 +301,20 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
             exit_cost = max(exit_cost, best)
             via_by_addr[addr] = via
 
+        extra = {"recursive"}
+        if ambiguous:
+            extra.add("recursion_depth_ambiguous")
         if k is None:
             for addr in comp:
                 bounds[addr].unbounded = True
                 bounds[addr].bound = exit_cost
-                bounds[addr].flags = sorted(set(bounds[addr].flags) | {"recursive"})
+                bounds[addr].flags = sorted(set(bounds[addr].flags) | extra)
                 bounds[addr].via = via_by_addr[addr]
         else:
             total = (k - 1) * back_depth + exit_cost
             for addr in comp:
                 bounds[addr].bound = total
-                bounds[addr].flags = sorted(set(bounds[addr].flags) | {"recursive"})
+                bounds[addr].flags = sorted(set(bounds[addr].flags) | extra)
                 bounds[addr].via = via_by_addr[addr]
 
     # ---- roots ----------------------------------------------------------
@@ -262,20 +332,36 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
 
     thread_bound = bounds[entry_fn.addr].bound
 
+    roots = [entry_fn.addr]
     handlers: list[Handler] = []
     for idx, fn in vectors:
         if idx == 1 or fn is None:
             continue
         name = fn.name
+        enabled = name not in opts.disabled
         handlers.append(
             Handler(
                 name=name,
                 vector=idx,
                 stack=bounds[fn.addr].bound if fn.addr in bounds else 0,
                 priority=opts.priorities.get(name),
-                enabled=name not in opts.disabled,
+                enabled=enabled,
             )
         )
+        if enabled:
+            roots.append(fn.addr)
+
+    # Everything the entry point or an enabled handler can call.  Recursion in
+    # code no root reaches cannot overflow anything, so the build gate must not
+    # be failed by it.
+    reachable: set[int] = set()
+    pending = [a for a in roots if a in bounds]
+    while pending:
+        addr = pending.pop()
+        if addr in reachable:
+            continue
+        reachable.add(addr)
+        pending.extend(succ.get(addr, []))
 
     exception_bound = worst_chain(handlers, opts.prigroup, opts.fpu) if opts.exceptions else 0
     level_costs: dict[str, int] = {}
@@ -312,4 +398,5 @@ def analyse(elf: ElfInfo, opts: Options) -> Result:
         worst_path=path,
         stack_region=elf.stack_region(),
         options=opts,
+        reachable=reachable,
     )

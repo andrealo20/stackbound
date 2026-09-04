@@ -110,9 +110,11 @@ def main() -> int:
         entry["tightness"] = (full["total"] / measured) if measured else None
         results.append(entry)
         status = "sound" if entry["sound"] else ("UNBOUNDED" if full["unbounded"] else "UNSOUND")
+        tightness = entry["tightness"]
+        shown = "n/a" if tightness is None else f"{tightness:.3f}"
         print(
             f"{case:<14} measured {measured:5d}   bound {full['total']:5d}   "
-            f"{status:<10} tightness {entry['tightness']:.3f}"
+            f"{status:<10} tightness {shown}"
         )
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
@@ -131,7 +133,11 @@ def main() -> int:
         )
     print(f"\nwritten to {args.out}")
 
-    bad = [r["case"] for r in results if not r["sound"] and not r["modes"]["full"]["unbounded"]]
+    # An unbounded case is a failure too: a benchmark that lost its recursion
+    # annotation produces no bound at all, which must not exit 0.
+    bad = [r["case"] for r in results if not r["sound"]]
+    if bad:
+        print("not sound: " + ", ".join(bad))
     return 1 if bad else 0
 
 

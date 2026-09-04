@@ -45,7 +45,7 @@ before writing a line.
 
 For a function $f$ with local allocation $L(f)$ and call sites $c$:
 
-$$ S(f) = \max\Big( L(f),\; \max_{c \,\in\, \mathrm{calls}(f)} \big( d(c) + \max_{g \,\in\, T(c)} S(g) \big) \Big) $$
+$$ S(f) = \max\Big( L(f), \max_{c \in \mathrm{calls}(f)} \big( d(c) + \max_{g \in T(c)} S(g) \big) \Big) $$
 
 where $d(c)$ is the stack in use at the moment of the call and $T(c)$ the set of
 possible callees.
@@ -61,7 +61,7 @@ of `SP` at each instruction, which is section 4.
 A cycle has no finite bound. With a stated number of activations $k$ for a
 strongly connected component:
 
-$$ S(\mathrm{SCC}) = (k-1)\,\max_{\text{back edges}} d \;+\; \max_{f \,\in\, \mathrm{SCC}} S_{\mathrm{exit}}(f) $$
+$$ S(\mathrm{SCC}) = (k-1) \max_{\text{back edges}} d + \max_{f \in \mathrm{SCC}} S_{\mathrm{exit}}(f) $$
 
 $k-1$ activations each reach their deepest recursion site, and the last one runs
 to its own maximum. Without $k$ the component is reported unbounded and
@@ -69,9 +69,22 @@ to its own maximum. Without $k$ the component is reported unbounded and
 dangerous thing the tool could do, because it would look exactly like a correct
 answer.
 
+$k$ counts activations of the component, not of any one function in it. For
+mutual recursion this is the distinction that decides whether the bound holds:
+`ping(4)` runs `ping, pong, ping, pong, ping`, which is five activations of the
+component and three of `ping`. Stating 3 because `ping` is entered three times
+would cover three frames where five are on the stack. The number is a property
+of the component, so it is stated once, on any one of its members. When two
+members carry numbers that add up to more than the largest of them, that is what
+a per-function count looks like, and the component is flagged
+`recursion_depth_ambiguous` rather than read either way in silence. The reading
+used with the flag is their sum, which is exact if they were per-function counts
+and pessimistic if the total was repeated. The maximum would be wrong in the
+first case, and wrong downwards.
+
 ### Exceptions
 
-$$ S_{\mathrm{exc}} = \sum_{\ell \,\in\, \mathrm{levels}} \;\max_{h \,\in\, \ell} \big( F + \mathrm{align} + S(h) \big) $$
+$$ S_{\mathrm{exc}} = \sum_{\ell \in \mathrm{levels}} \max_{h \in \ell} \big( F + \mathrm{align} + S(h) \big) $$
 
 $F$ is 32 bytes (r0-r3, r12, LR, PC, xPSR) or 104 with an FP context, and
 `STKALIGN` can cost one padding word per entry. A chain contains at most one
@@ -143,6 +156,21 @@ with `0xC0DEFACE` at reset, runs, and scans upward for the first word that is no
 longer the pattern. That measurement comes out of QEMU's model of a Cortex-M3 —
 including the exception frames the hardware pushes, which no part of the analyser
 is involved in producing. `tools/validate.py` compares the two for every case.
+
+The watermark measures how far the stack was *written*, not how far `SP`
+travelled. A function that does `sub sp, #256` and writes only the first half
+leaves the rest of its frame painted, and the watermark stops there. So the
+measured column is itself a lower bound on the real usage, and the two columns
+coincide on this benchmark by construction: every case passes its buffer to
+`sb_consume`, which touches every word of it. That is what makes the comparison
+meaningful here, and it is also why "measured" must not be read as ground truth
+on firmware that does not do the same.
+
+Two consequences for the direction of the check. A bound below the watermark is
+conclusively wrong, which is the property `validate.py` tests. A bound above it
+proves nothing on its own, because the watermark can be short of the real
+maximum for two independent reasons: the run may not have taken the deepest
+path, and the deepest path may not have written everything it allocated.
 
 **Against exhaustive enumeration.** The linear worst-chain formula is checked
 against `worst_chain_bruteforce`, which enumerates every admissible nesting
@@ -220,6 +248,16 @@ applies to real firmware too.
 
 **A `sink` symbol defined per case.** Not interesting, but it is the reason the
 first build of five ELFs produced one. Moved to the common runtime.
+
+**The benchmark startup only works under QEMU.** `common/mps2.ld` places `.data`
+in RAM with no load address in flash, and `Reset_Handler` clears `.bss` but
+copies nothing. Both are wrong for a real board, where the initialisers live in
+flash and have to be copied at reset; they work here only because QEMU loads
+every `PT_LOAD` segment directly to its virtual address. Found while reviewing
+the linker script, and left alone deliberately: every number in
+`results/results.json` was measured with this startup path, and a different one
+would move the measurements without any way to re-measure them. It is a comment
+in the linker script instead.
 
 ## 7. What was deliberately not built
 

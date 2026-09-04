@@ -22,7 +22,9 @@ inputs:
     required: false
     default: ""
   allow-unbounded:
-    description: Do not fail when a recursive component has no stated depth
+    description: >
+      Report a component with no stated depth as a lower bound (exit 3) instead
+      of failing outright (exit 2). The step still fails either way.
     required: false
     default: "false"
 
@@ -39,15 +41,33 @@ runs:
   steps:
     - name: Install stackbound
       shell: bash
-      run: pip install --quiet "${{ github.action_path }}"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: pip install --quiet "$ACTION_PATH"
 
+    # Every input reaches the script through the environment and is quoted where
+    # it is used.  Interpolating ${{ inputs.* }} into the body would let the
+    # value be read as shell.
+    #
+    # The check exits 0 when the firmware fits, 1 when it does not, 2 when a
+    # reachable component has no bound, and 3 when the number is only a lower
+    # bound or the stack region is unknown.
     - id: run
       shell: bash
+      env:
+        ELF: ${{ inputs.elf }}
+        CONFIG: ${{ inputs.config }}
+        STACK_SIZE: ${{ inputs.stack-size }}
+        ALLOW_UNBOUNDED: ${{ inputs.allow-unbounded }}
       run: |
-        args=("${{ inputs.elf }}")
-        [ -n "${{ inputs.config }}" ] && args+=(--config "${{ inputs.config }}")
-        [ -n "${{ inputs.stack-size }}" ] && args+=(--stack-size "${{ inputs.stack-size }}")
-        [ "${{ inputs.allow-unbounded }}" = "true" ] && args+=(--allow-unbounded)
+        args=("$ELF")
+        if [ -n "$CONFIG" ]; then args+=(--config "$CONFIG"); fi
+        if [ -n "$STACK_SIZE" ]; then args+=(--stack-size "$STACK_SIZE"); fi
+
+        # --allow-unbounded exists only on check, and a bare test as the last
+        # command of a line would end the step under `set -e`.
+        check_args=("${args[@]}")
+        if [ "$ALLOW_UNBOUNDED" = "true" ]; then check_args+=(--allow-unbounded); fi
 
         python -m stackbound report "${args[@]}" | tee report.txt
         python -m stackbound report "${args[@]}" --json > report.json
@@ -64,4 +84,4 @@ runs:
           echo '```'
         } >> "$GITHUB_STEP_SUMMARY"
 
-        python -m stackbound check "${args[@]}"
+        python -m stackbound check "${check_args[@]}"
