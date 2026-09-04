@@ -48,7 +48,7 @@ built on GCC's `-fstack-usage` output (`avstack`, `WorstCaseStack`,
 `checkStackUsage`, `puncover`) have the same two gaps.
 
 The tool that closes them, AbsInt's StackAnalyzer, is commercial, and ships
-qualification kits for DO-178C, ISO 26262, IEC 61508 and EN 50128 — the standards
+qualification kits for DO-178C, ISO 26262, IEC 61508 and EN 50128, the standards
 under which "prove the stack cannot overflow" stops being good practice and
 becomes a deliverable.
 
@@ -58,7 +58,7 @@ the paid side covers the rest. `stackbound` is an attempt at the middle.
 Two consequences, both measured on this benchmark:
 
 * **Ignoring interrupts is not conservative, it is wrong.** On `isr_nesting` the
-  hardware used 684 bytes and the interrupt-blind bound is 276 — short by 408.
+  hardware used 684 bytes and the interrupt-blind bound is 276, short by 408.
 * **Ignoring indirect calls is worse.** On `table` the blind bound is 48 against
   556 measured, short by 508 bytes, a factor of 11.6.
 
@@ -101,7 +101,7 @@ precision of a run is a number rather than a claim.
 | `literal` | the pointer is a constant from the literal pool | exact, one target |
 | `table` | loaded from an object in a read-only section | exact: the contents are read out of the image, even when the index is unknown |
 | `typed` | loaded from a mutable object whose DWARF type is a function pointer | address-taken functions with a matching signature |
-| `any` | nothing is known | every address-taken function — sound, and expensive |
+| `any` | nothing is known | every address-taken function, sound, and expensive |
 
 The pointer value is recovered by a forward dataflow over the function's control
 flow graph with a meet at join points, so a table base register loaded before a
@@ -113,7 +113,7 @@ What this is worth, on the same firmwares:
 
 On `table` the analysis reads the four-entry dispatch table out of `.rodata` and
 returns exactly the three functions in it, excluding `cmd_orphan` whose address
-is taken elsewhere — 1088 bytes less pessimism than the blind fallback. On
+is taken elsewhere, 1088 bytes less pessimism than the blind fallback. On
 `global_fp` the DWARF signature excludes two decoys with different prototypes:
 1624 bytes.
 
@@ -140,7 +140,7 @@ priorities and priority groupings.
 
 Which interrupts are enabled and at what priority is set by code at run time and
 cannot be read from the image. Without a configuration file `stackbound` assumes
-the worst the hardware allows — every vector slot live, every priority distinct.
+the worst the hardware allows, every vector slot live, every priority distinct.
 The configuration is what makes the number tight, and the tool says so rather
 than quietly assuming interrupts are off.
 
@@ -205,7 +205,7 @@ time. Rather than guess, `stackbound` takes them from a configuration file:
 | `any_includes_vectors` | let unresolved calls reach vector-table-only functions | `false` |
 
 Every default is the conservative one. With no configuration at all, every vector
-slot is assumed live at a distinct priority — so all of them can nest — and any
+slot is assumed live at a distinct priority, so all of them can nest, and any
 recursion makes the run unbounded. The configuration only ever makes the number
 smaller, and the report says which assumptions produced it.
 
@@ -242,7 +242,7 @@ results/         results.json and the figures generated from it
 ## Checking that the tests have teeth
 
 A test that has never been seen to fail is not yet a test. `tools/sabotage.py`
-applies six mutations to the analyser — plausible mistakes, not typos — and
+applies six mutations to the analyser, plausible mistakes, not typos, and
 records which test catches each:
 
 | mutation | caught by |
@@ -269,7 +269,7 @@ Stated here rather than left to be discovered.
 * **The benchmark is synthetic.** Six firmwares written to exercise specific
   behaviours, not a large real-world codebase. The bounds are validated against
   a real Cortex-M3 execution, but on programs whose call graphs are small enough
-  to check by hand — which is also why the hand-check in `docs/design.md` is
+  to check by hand, which is also why the hand-check in `docs/design.md` is
   possible.
 * **The measured column is itself a lower bound.** The firmware paints its stack
   and scans for the first word that is no longer the pattern, which measures how
@@ -303,7 +303,7 @@ Stated here rather than left to be discovered.
 * **The number of implemented priority bits is not modelled.** A device
   implementing only the top three or four bits ignores the rest, so two
   priorities this tool treats as distinct levels may in fact share one and be
-  unable to nest. That error is in the safe direction — the bound is larger than
+  unable to nest. That error is in the safe direction: the bound is larger than
   it needs to be, never smaller.
 * **PSP is not modelled.** Everything is assumed to run on the main stack. An
   RTOS with per-task process stacks needs a per-stack bound, which this does not
@@ -384,4 +384,4 @@ case against the disassembly, and the mistakes found while building this.
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

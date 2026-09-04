@@ -310,7 +310,7 @@ class ElfInfo:
         known function ``f`` is treated as taking that function's address.
 
         This over-approximates: an unrelated constant can collide with a
-        function address.  Over-approximating is the safe direction here — it
+        function address.  Over-approximating is the safe direction here, it
         can only add candidates to an indirect call, never remove one.
         """
         starts = set(self.functions.keys())

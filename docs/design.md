@@ -3,7 +3,7 @@
 ## 1. The problem
 
 A Cortex-M has no MMU and no guard page. When the stack grows past its region it
-writes over whatever is next in RAM — usually `.bss` — and the failure appears
+writes over whatever is next in RAM, usually `.bss`, and the failure appears
 somewhere else entirely, minutes later, as corrupted state. Testing does not find
 it reliably, because the deepest path is by construction the one that rarely
 runs: the error branch inside the interrupt handler that fires while the parser
@@ -25,15 +25,15 @@ answer against a real execution instead of asserting it.
 The survey done before writing any code. It is a survey, not a proof that
 nothing else exists:
 
-* **`cargo-call-stack`** — whole-program analysis for Rust on Cortex-M. Does not
+* **`cargo-call-stack`**: whole-program analysis for Rust on Cortex-M. Does not
   analyse indirect calls: the machine code carries no type information usable to
   build a callee list, so it warns and gives up. Cannot compute a whole-program
   maximum when exceptions are present, because handlers are disconnected nodes.
-* **GCC `-fstack-usage` post-processors** — `avstack.pl`, `WorstCaseStack`,
+* **GCC `-fstack-usage` post-processors**: `avstack.pl`, `WorstCaseStack`,
   `checkStackUsage`, `puncover`. Per-function frames from the compiler, call
   graph from the source or the map file. Same two gaps, plus a dependency on
   `.su` files that only exist if the build produced them.
-* **AbsInt StackAnalyzer** — handles recursion and function pointers, with
+* **AbsInt StackAnalyzer**: handles recursion and function pointers, with
   qualification kits for DO-178B/C, ISO 26262, IEC 61508, EN 50128. Commercial.
 
 The split is clean: open source covers direct calls with interrupts ignored,
@@ -95,7 +95,7 @@ worst chain the priority configuration admits.
 Preemption level is `priority >> (PRIGROUP + 1)`: with PRIGROUP $= g$ the low
 $g+1$ bits are subpriority, which orders tail-chaining but does not enable
 nesting. A handler whose priority is not known statically gets a unique level,
-which lets it nest with everything — the conservative choice.
+which lets it nest with everything, the conservative choice.
 
 The extended frame is counted in full even when lazy FP stacking is enabled: lazy
 stacking reserves the space on exception entry and fills it later, so the stack
@@ -118,8 +118,8 @@ register depending on whether the list is S or D registers), `stmdb`/`ldmia` wit
 `sp!`, `add`/`sub` with an immediate, and SP-based loads and stores with
 writeback in either indexing form.
 
-Anything else that writes `SP` — `mov sp, r7`, `sub sp, sp, r3` for a variable
-length array — is not modelled. The function is flagged and falls back to a bound
+Anything else that writes `SP`, `mov sp, r7`, `sub sp, sp, r3` for a variable
+length array, is not modelled. The function is flagged and falls back to a bound
 that holds under any control flow: the sum of every allocation in it. Dynamic
 allocation makes the function unbounded outright.
 
@@ -153,7 +153,7 @@ analyser, and the hardware model.
 
 **Against an execution, not against itself.** Every firmware paints its stack
 with `0xC0DEFACE` at reset, runs, and scans upward for the first word that is no
-longer the pattern. That measurement comes out of QEMU's model of a Cortex-M3 —
+longer the pattern. That measurement comes out of QEMU's model of a Cortex-M3,
 including the exception frames the hardware pushes, which no part of the analyser
 is involved in producing. `tools/validate.py` compares the two for every case.
 
@@ -178,8 +178,8 @@ order, on 40 randomised handler sets with random priorities, priority groupings
 and FP settings. A formula that missed a chain, or allowed one the hardware
 forbids, disagrees.
 
-**Against deliberate sabotage.** `tools/sabotage.py` applies six mutations —
-plausible mistakes, not typos — and records which test catches each:
+**Against deliberate sabotage.** `tools/sabotage.py` applies six mutations,
+plausible mistakes, not typos, and records which test catches each:
 
 | mutation | caught by |
 |---|---|
@@ -214,7 +214,7 @@ from its symbol start to its end and interpreted everything. GCC puts constant
 pools inside function bounds, and a `.word` such as `0x20002008` disassembles
 into a perfectly plausible instruction. Symptom: `incomplete_cfg` on a third of
 the functions, including two-instruction leaves like `app_name`. Two separate
-bugs behind one symptom — unreachable "instructions" tripping the CFG check, and
+bugs behind one symptom, unreachable "instructions" tripping the CFG check, and
 the risk of a fake `SP` write corrupting the depth. Fix: locate pools from the
 `ldr rX, [pc, #imm]` instructions that reference them, then re-decode in segments
 between them, repeating until the pool set stops changing.
@@ -231,7 +231,7 @@ between the last real instruction and the pool. Fix: unreachable `nop` padding
 does not count as lost control flow.
 
 **`Reset_Handler` as a candidate for every unresolved call.** Its address is in
-the vector table, so it is address-taken, so the `any` tier included it — which
+the vector table, so it is address-taken, so the `any` tier included it, which
 made the call graph one enormous cycle through the reset handler and every bound
 unbounded. The measured symptom was `param_fp` reporting UNBOUNDED with a bound
 of 1068. Fix: distinguish addresses taken by the vector table from addresses
@@ -243,7 +243,7 @@ is taken by an initialised global that nothing reads. Without `-fdata-sections`
 the linker drops the whole input `.data` section as unreferenced, and the fact
 that the address was ever taken vanishes from the image. The analyser was right
 about the binary it was given. The case now reads the pointer without calling it,
-which keeps the section alive — and the effect is in the limitations, because it
+which keeps the section alive, and the effect is in the limitations, because it
 applies to real firmware too.
 
 **A `sink` symbol defined per case.** Not interesting, but it is the reason the

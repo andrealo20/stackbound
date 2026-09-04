@@ -6,8 +6,8 @@ itself be interrupted by anything of higher priority.  The worst case is
 therefore not "the largest handler" and not "the sum of all handlers", but the
 most expensive *nesting chain* the priority configuration allows.
 
-Two handlers at the same preemption priority can never nest — the second one is
-tail-chained after the first returns — so a chain contains at most one handler
+Two handlers at the same preemption priority can never nest, the second one is
+tail-chained after the first returns, so a chain contains at most one handler
 per preemption level.  The worst chain is obtained by taking the most expensive
 handler at each level and stacking all of them:
 

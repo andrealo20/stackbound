@@ -4,15 +4,15 @@ Free stack analysers stop at `blx r3`.  This module tries four things in order
 and records which one succeeded, so the precision of the result is measurable
 rather than asserted:
 
-  1. **literal** — the pointer is a constant from the literal pool.  One target,
+  1. **literal**, the pointer is a constant from the literal pool.  One target,
      exactly.
-  2. **table** — the pointer was loaded from an object in a read-only section.
+  2. **table**, the pointer was loaded from an object in a read-only section.
      The contents are fixed at link time, so the candidate set is read straight
      out of the image.  Exact, even when the index is unknown.
-  3. **typed** — the pointer was loaded from a mutable object whose DWARF type
+  3. **typed**, the pointer was loaded from a mutable object whose DWARF type
      is a pointer to a function.  Candidates are the address-taken functions
      whose signature matches.
-  4. **any** — nothing is known.  Candidates are every address-taken function
+  4. **any**, nothing is known.  Candidates are every address-taken function
      in the image.  Sound, and usually expensive.
 
 Tiers 1 and 2 are exact; tier 3 is an over-approximation limited by the type

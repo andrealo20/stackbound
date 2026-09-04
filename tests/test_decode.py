@@ -44,8 +44,8 @@ def test_call_site_depth_is_not_the_function_maximum(firmware):
 def test_no_function_is_flagged_in_the_benchmark(firmware):
     """Every benchmark ELF must decode cleanly.
 
-    A flag here does not mean the bound is wrong — flagged functions fall back
-    to a sound over-approximation — but it does mean the tool stopped
+    A flag here does not mean the bound is wrong, flagged functions fall back
+    to a sound over-approximation, but it does mean the tool stopped
     understanding the code, and on this corpus that should not happen.
     """
     for case, path in firmware.items():
