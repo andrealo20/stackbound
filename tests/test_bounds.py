@@ -139,3 +139,9 @@ def test_ignoring_indirect_calls_under_reports(case, firmware, configs):
     measured = _measure(firmware[case])
     naive = _analyse(firmware[case], configs[case], indirect_mode="none")
     assert naive.total < measured
+
+
+def test_fpu_frame_is_the_default():
+    """The extended frame is the conservative assumption; only a config removes it."""
+    assert config_mod.to_options({}, Options()).fpu is True
+    assert config_mod.to_options({"fpu": False}, Options()).fpu is False

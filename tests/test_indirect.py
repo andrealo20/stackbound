@@ -4,9 +4,15 @@ Each tier makes a claim that can be falsified by naming a function that must be
 in the candidate set and one that must not.
 """
 
+from types import SimpleNamespace
+
+import pytest
+from capstone import CS_ARCH_ARM, CS_MODE_MCLASS, CS_MODE_THUMB, Cs
+from capstone.arm_const import ARM_REG_R0, ARM_REG_R3
+
 from stackbound.analyze import Options, analyse
 from stackbound.elfinfo import ElfInfo
-from stackbound.indirect import IndirectResolver
+from stackbound.indirect import IndirectResolver, Load, SymAddr
 from stackbound.thumb import analyse_all
 
 from .conftest import needs_gcc
@@ -77,3 +83,58 @@ def test_resolution_reduces_the_bound(firmware, configs):
     full = analyse(ElfInfo(elf_path), Options(indirect_mode="full"))
     blind = analyse(ElfInfo(elf_path), Options(indirect_mode="any"))
     assert full.total < blind.total
+
+
+def _thumb(hexbytes, addr=0x1000):
+    """Decode Thumb-2 machine code, for tests that need no firmware."""
+    md = Cs(CS_ARCH_ARM, CS_MODE_THUMB | CS_MODE_MCLASS)
+    md.detail = True
+    return list(md.disasm(bytes.fromhex(hexbytes), addr))
+
+
+TABLE = 0x2000
+
+
+def _walk_table_loop():
+    """``p = table; for (;;) (*p++)();`` as GCC writes it.
+
+    1000: ldr   r4, [pc, #8]      @ r4 = table
+    1002: ldr.w r3, [r4], #4      @ r3 = *p, p++
+    1006: blx   r3
+    1008: b     1002
+    """
+    insns = _thumb("024c 54f8043b 9847 fbe7")
+    elf = SimpleNamespace(
+        read_word=lambda addr: TABLE, globals={TABLE: object()}, section_at=lambda a: True
+    )
+    resolver = IndirectResolver.__new__(IndirectResolver)
+    resolver.elf = elf
+    fa = SimpleNamespace(
+        fn=SimpleNamespace(addr=0x1000),
+        insns=insns,
+        succs={0x1000: [0x1002], 0x1002: [0x1006], 0x1006: [0x1008], 0x1008: [0x1002]},
+        conditional=set(),
+    )
+    return resolver, fa
+
+
+def test_post_indexed_load_moves_the_base():
+    """A pointer stepped through a table reaches every entry, not just the first."""
+    resolver, fa = _walk_table_loop()
+    state_in, converged = resolver._propagate(fa)
+    assert converged
+    assert state_in[0x1006][ARM_REG_R3] == Load(TABLE, None)
+
+
+def test_a_call_clobbers_the_argument_registers():
+    """After ``bl`` r0 is the return value, not the argument it was given."""
+    resolver, fa = _walk_table_loop()
+    bl = _thumb("00f004f8")[0]
+    out = resolver._transfer(bl, {ARM_REG_R0: SymAddr(TABLE)}, fa)
+    assert ARM_REG_R0 not in out
+
+
+def test_unknown_manual_target_is_an_error():
+    elf = SimpleNamespace(by_name={"on_rx": object()})
+    with pytest.raises(ValueError, match="on_rxx"):
+        IndirectResolver(elf, manual={0x1C42: ["on_rx", "on_rxx"]})

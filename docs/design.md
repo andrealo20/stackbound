@@ -259,6 +259,32 @@ the linker script, and left alone deliberately: every number in
 would move the measurements without any way to re-measure them. It is a comment
 in the linker script instead.
 
+**Four ways to lose a call, found in review.** None of them shows on the
+benchmark, which is why the suite passed with all four in place.
+
+* `ldr.w r3, [r4], #4` moves `r4`, but the dataflow returned after assigning
+  `r3` and kept the old base. In a loop over a const table every call resolved
+  to the first entry and was reported exact. The base now becomes a pointer into
+  the same object at an unknown offset, and a load through it reads the whole
+  table.
+* Capstone reports only `LR` as written by `bl`, so a pointer held in `r0` before
+  a call survived it and was taken for the return value. A call now clobbers
+  r0-r3 and r12, as the AAPCS allows.
+* Inside an IT block capstone prints the condition into the mnemonic. `blne`
+  matched neither `bl` nor a conditional branch, so it was an ordinary
+  instruction and its callee vanished from the bound. The condition is now
+  stripped from the mnemonics where it can appear that way.
+* A misspelt name in `indirect_targets` was filtered out and the call site kept
+  an empty target list. It is now an error.
+
+Two defaults were wrong in the unsafe direction. The vector table was looked up
+only as `.vectors`; STM32Cube and nRF5 linker scripts call it `.isr_vector`, and
+the fallback read `.text` as vectors, found no handlers and reported an
+exception bound of zero. And `fpu` defaulted to the basic frame, 72 bytes per
+preemption level short on a core whose FPU is in use, although the README
+called every default conservative. The table is now found by name or by its
+reset vector, or the run stops, and the FP frame is the default.
+
 ## 7. What was deliberately not built
 
 **WCET in cycles.** The original plan had instruction-level timing alongside

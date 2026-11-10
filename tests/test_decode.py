@@ -10,8 +10,13 @@ bytes are in use when it calls ``level_b``.  ``level_b`` pushes 8 and subtracts
 256, so 264.  ``level_c`` pushes 4 (``push {lr}``) and subtracts 68, so 72.
 """
 
-from stackbound.elfinfo import ElfInfo
-from stackbound.thumb import analyse_all, analyse_function
+import struct
+
+import pytest
+from capstone import CS_ARCH_ARM, CS_MODE_MCLASS, CS_MODE_THUMB, Cs
+
+from stackbound.elfinfo import ElfInfo, Section
+from stackbound.thumb import _classify, analyse_all, analyse_function
 
 from .conftest import needs_gcc
 
@@ -83,3 +88,50 @@ def test_vector_table(firmware):
     assert by_index[16] == "IRQ0_Handler"
     assert by_index[17] == "IRQ1_Handler"
     assert by_index[18] == "IRQ2_Handler"
+
+
+def _thumb(hexbytes, addr=0x1000):
+    """Decode Thumb-2 machine code, for tests that need no firmware."""
+    md = Cs(CS_ARCH_ARM, CS_MODE_THUMB | CS_MODE_MCLASS)
+    md.detail = True
+    return list(md.disasm(bytes.fromhex(hexbytes), addr))
+
+
+def test_conditional_call_in_an_it_block_is_a_call():
+    """``it ne; blne f`` is printed ``blne``: still a call, not an ordinary instruction."""
+    _it, blne = _thumb("18bf 00f006f8")
+    assert blne.mnemonic == "blne"
+    assert _classify(blne)[0] == "call"
+
+
+@pytest.mark.parametrize("code", ["00d1", "00d9", "00dd", "00db"])  # bne bls ble blt
+def test_conditional_branch_is_still_a_branch(code):
+    assert _classify(_thumb(code)[0])[0] == "cjump"
+
+
+def _elf_with(*sections, entry=0x100):
+    elf = ElfInfo.__new__(ElfInfo)
+    elf.sections = list(sections)
+    elf.entry = entry
+    return elf
+
+
+def _sec(name, words):
+    return Section(name, 0, struct.pack(f"<{len(words)}I", *words), False, False, True)
+
+
+def test_vector_table_found_under_the_stm32_name():
+    vectors = _sec(".isr_vector", [0x20001000, 0x101, 0])
+    text = _sec(".text", [0xB5104C02, 0x47984B01])
+    assert _elf_with(text, vectors).vector_section() is vectors
+
+
+def test_vector_table_found_by_its_reset_vector():
+    text = _sec(".text", [0xB5104C02, 0x47984B01])
+    vectors = _sec(".rom_start", [0x20001000, 0x101, 0])
+    assert _elf_with(text, vectors).vector_section() is vectors
+
+
+def test_no_vector_table_is_an_error():
+    with pytest.raises(ValueError, match="vector table"):
+        _elf_with(_sec(".text", [0xB5104C02, 0x47984B01])).vector_section()

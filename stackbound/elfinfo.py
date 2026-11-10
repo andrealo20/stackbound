@@ -17,6 +17,10 @@ from dataclasses import dataclass
 from elftools.elf.constants import SH_FLAGS
 from elftools.elf.elffile import ELFFile
 
+#: Section names linker scripts commonly give the vector table: the one this
+#: repository's firmware uses, and the one in STM32Cube and nRF5 SDK scripts.
+VECTOR_SECTIONS = (".vectors", ".isr_vector")
+
 
 @dataclass
 class Function:
@@ -325,7 +329,7 @@ class ElfInfo:
                 if word & 1 and (word & ~1) in starts:
                     target = word & ~1
                     self.address_taken.add(target)
-                    if sec.name == ".vectors":
+                    if sec.name in VECTOR_SECTIONS:
                         self.taken_by_vectors.add(target)
                     else:
                         self.taken_by_code.add(target)
@@ -348,21 +352,36 @@ class ElfInfo:
         return self.taken_by_vectors - self.taken_by_code
 
     # -- vector table -----------------------------------------------------
+    def vector_section(self) -> Section:
+        """The section holding the vector table.
+
+        By name when the linker script uses a usual one, otherwise the section
+        whose second word is the reset vector, i.e. the ELF entry point.
+        Reading code as vectors would find no handlers and report an exception
+        bound of zero, so failing to find the table is an error.
+        """
+        for name in VECTOR_SECTIONS:
+            for sec in self.sections:
+                if sec.name == name and len(sec.data) >= 8:
+                    return sec
+        for sec in self.sections:
+            if len(sec.data) >= 8:
+                reset = struct.unpack("<I", sec.data[4:8])[0]
+                if reset & 1 and reset & ~1 == self.entry:
+                    return sec
+        raise ValueError(
+            "cannot find the vector table: no section named "
+            + " or ".join(VECTOR_SECTIONS)
+            + ", and none whose second word is the ELF entry point"
+        )
+
     def vector_table(self) -> tuple[int, list[tuple[int, Function | None]]]:
         """Return ``(initial_sp, [(index, function), ...])``.
 
         Index 0 is the initial stack pointer and is returned separately; index 1
         is Reset, 2..15 are the system exceptions and 16+ are external IRQs.
         """
-        sec = None
-        for s in self.sections:
-            if s.name == ".vectors":
-                sec = s
-                break
-        if sec is None:
-            sec = self.section_at(self.entry)
-        if sec is None or len(sec.data) < 8:
-            return 0, []
+        sec = self.vector_section()
 
         initial_sp = struct.unpack("<I", sec.data[0:4])[0]
         out: list[tuple[int, Function | None]] = []

@@ -55,6 +55,13 @@ _CC_SUFFIXES = (
     "le",
 )
 
+#: Mnemonics that capstone prints with the condition appended when they sit in
+#: an IT block (``blne``, ``popeq``).  Without stripping it a conditional call
+#: reads as an ordinary instruction and its callee drops out of the bound.  A
+#: plain conditional branch (``bne``, ``bls``) is two letters shorter and never
+#: matches, so it keeps its own meaning.
+_IT_SUFFIXED = ("blx", "bl", "bx", "pop", "ldm", "ldmia", "ldr", "tbb", "tbh")
+
 
 @dataclass
 class CallSite:
@@ -172,6 +179,8 @@ def _classify(insn) -> tuple[str, int | None, str | None]:
     call / icall / jump / cjump / ret / exit / tbranch / normal."""
     m = insn.mnemonic.lower()
     base = m.split(".")[0]
+    if base[-2:] in _CC_SUFFIXES and base[:-2] in _IT_SUFFIXED:
+        base = base[:-2]
 
     if base == "bl":
         return "call", _branch_target(insn), None

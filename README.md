@@ -4,7 +4,7 @@
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![firmware: C99](https://img.shields.io/badge/firmware-C99-orange.svg)](firmware/)
-[![tests: 92](https://img.shields.io/badge/tests-92-green.svg)](tests/)
+[![tests: 92](https://img.shields.io/badge/tests-104-green.svg)](tests/)
 [![mutations caught: 6/6](https://img.shields.io/badge/mutations%20caught-6%2F6-green.svg)](tools/sabotage.py)
 
 **A static worst-case stack analyser for Cortex-M firmware that models interrupt
@@ -165,6 +165,10 @@ than quietly assuming interrupts are off.
 * Literal pools are located and skipped before anything is interpreted, because a
   `.word` decoded as an instruction that happens to write `SP` corrupts
   everything downstream.
+* The vector table is the section named `.vectors` or `.isr_vector`, or failing
+  that the one whose second word is the ELF entry point. If there is none the
+  run stops: code read as vectors yields no handlers and an exception bound of
+  zero.
 
 ## Using it on your own firmware
 
@@ -197,16 +201,17 @@ time. Rather than guess, `stackbound` takes them from a configuration file:
 | key | meaning | default |
 |---|---|---|
 | `prigroup` | AIRCR PRIGROUP; subpriority bits are `PRIGROUP + 1` | `0` |
-| `fpu` | assume an extended (FP) exception frame | `false` |
+| `fpu` | assume an extended (FP) exception frame; `false` on a core without an FPU, or firmware that never uses it | `true` |
 | `entry` | thread-mode root | vector 1 |
 | `handlers` | per handler: raw 8-bit `priority`, and `enabled` | every vector slot enabled, every priority unknown |
 | `recursion` | total activations of a recursive component, stated on any one of its members | none, so cycles are unbounded |
-| `indirect_targets` | manual callee list for a call site address | resolved automatically |
+| `indirect_targets` | manual callee list for a call site address; a name that is not a function in the image is an error | resolved automatically |
 | `any_includes_vectors` | let unresolved calls reach vector-table-only functions | `false` |
 
 Every default is the conservative one. With no configuration at all, every vector
-slot is assumed live at a distinct priority, so all of them can nest, and any
-recursion makes the run unbounded. The configuration only ever makes the number
+slot is assumed live at a distinct priority, so all of them can nest, every
+exception frame is the 104-byte FP one, and any recursion makes the run
+unbounded. The configuration only ever makes the number
 smaller, and the report says which assumptions produced it.
 
 The one entry that is easy to get wrong is `recursion`. The number is the total
@@ -233,7 +238,7 @@ stackbound/      the analyser
   report.py cli.py config.py
 firmware/        six bare-metal C99 benchmark cases and their configurations
 tools/           validate.py (QEMU + ablation), sabotage.py, make_figures.py
-tests/           92 tests
+tests/           104 tests
 docs/design.md   derivation, hand-check against the disassembly, mistakes made
 results/         results.json and the figures generated from it
 ```
@@ -323,7 +328,7 @@ pip install -e .                    # pyelftools, capstone
 make -C firmware                    # six ELFs into firmware/build/
 python3 tools/validate.py           # run each in QEMU, analyse in four modes
 python3 tools/make_figures.py       # redraw the figures from results.json
-python3 -m pytest tests -q          # 92 tests
+python3 -m pytest tests -q          # 104 tests
 python3 tools/sabotage.py           # mutate the analyser, check the suite notices
 ```
 
@@ -356,8 +361,8 @@ python3 -m stackbound check firmware/build/isr_nesting.elf \
         --config firmware/config/isr_nesting.json
 # exit 0 fits
 #      1 does not fit
-#      2 no bound: a reachable component is unbounded, or calls a target that is
-#        not in the call graph
+#      2 no bound: a reachable component is unbounded, calls a target that is
+#        not in the call graph, or the image or configuration cannot be analysed
 #      3 nothing to compare against, or a number that is only a lower bound
 ```
 

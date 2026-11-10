@@ -41,7 +41,7 @@ class Options:
     indirect_mode: str = "full"
     exceptions: bool = True
     prigroup: int = 0
-    fpu: bool = False
+    fpu: bool = True  # the larger frame; a firmware without an FPU states it
     priorities: dict[str, int] = field(default_factory=dict)
     disabled: set[str] = field(default_factory=set)
     recursion: dict[str, int] = field(default_factory=dict)

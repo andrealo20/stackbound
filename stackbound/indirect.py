@@ -28,10 +28,26 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from capstone.arm_const import ARM_OP_IMM, ARM_OP_MEM, ARM_OP_REG, ARM_REG_PC, ARM_REG_SP
+from capstone.arm_const import (
+    ARM_OP_IMM,
+    ARM_OP_MEM,
+    ARM_OP_REG,
+    ARM_REG_PC,
+    ARM_REG_R0,
+    ARM_REG_R1,
+    ARM_REG_R2,
+    ARM_REG_R3,
+    ARM_REG_R12,
+    ARM_REG_SP,
+)
 
 from .elfinfo import ElfInfo, GlobalVar
-from .thumb import CallSite, FunctionAnalysis
+from .thumb import CallSite, FunctionAnalysis, _classify
+
+#: Registers a call may change under the AAPCS.  Capstone reports only LR as
+#: written by ``bl``, so a value held in r0 before a call would otherwise be
+#: mistaken for the value the callee returned.
+CALL_CLOBBERED = (ARM_REG_R0, ARM_REG_R1, ARM_REG_R2, ARM_REG_R3, ARM_REG_R12)
 
 TIERS = ("literal", "table", "typed", "any", "manual")
 
@@ -51,10 +67,14 @@ class Const:
 
 @dataclass(frozen=True)
 class SymAddr:
-    """Address of a static object (or function), plus a constant offset."""
+    """Address of a static object (or function), plus an offset.
+
+    ``off`` is None when the pointer is known to point into the object but not
+    where: a pointer stepped through a table in a loop.
+    """
 
     addr: int
-    off: int = 0
+    off: int | None = 0
 
 
 @dataclass(frozen=True)
@@ -82,7 +102,14 @@ Value = Const | SymAddr | Load | _Unknown
 
 
 def _meet(a: Value, b: Value) -> Value:
-    return a if a == b else UNKNOWN
+    if a == b:
+        return a
+    # Two offsets into the same object: still that object, index unknown.
+    if isinstance(a, SymAddr) and isinstance(b, SymAddr) and a.addr == b.addr:
+        return SymAddr(a.addr, None)
+    if isinstance(a, Load) and isinstance(b, Load) and a.base == b.base:
+        return Load(a.base, None)
+    return UNKNOWN
 
 
 @dataclass
@@ -106,6 +133,13 @@ class IndirectResolver:
     ):
         self.elf = elf
         self.manual = manual or {}
+        # A misspelt name would otherwise drop the call edge without a word.
+        for site, names in self.manual.items():
+            missing = [n for n in names if n not in elf.by_name]
+            if missing:
+                raise ValueError(
+                    f"indirect_targets for {site:#x}: no function named {', '.join(missing)}"
+                )
         excluded = set() if any_includes_vectors else elf.vector_only
         #: every function an unresolved indirect call could reach
         self.candidates = sorted(elf.address_taken - excluded)
@@ -174,6 +208,10 @@ class IndirectResolver:
         except Exception:
             written = []
 
+        if _classify(insn)[0] in ("call", "icall"):
+            for reg in CALL_CLOBBERED:
+                assign(reg, UNKNOWN)
+
         if m == "ldr" and len(ops) >= 2 and ops[0].type == ARM_OP_REG:
             dst = ops[0].reg
             if ops[1].type == ARM_OP_MEM:
@@ -191,12 +229,17 @@ class IndirectResolver:
                 if mem.base != ARM_REG_SP:
                     base = state.get(mem.base, UNKNOWN)
                     if isinstance(base, SymAddr):
-                        if mem.index == 0:
+                        if mem.index == 0 and base.off is not None:
                             assign(dst, Load(base.addr, base.off + int(mem.disp)))
                         else:
                             assign(dst, Load(base.addr, None))
+                        if mem.base in written and mem.base != dst:
+                            # [rN], #4 or [rN, #4]!: the base moves within the object.
+                            assign(mem.base, SymAddr(base.addr, None))
                         return state
-            assign(dst, UNKNOWN)
+            # The destination, and a written-back base with it.
+            for reg in {dst, *written}:
+                assign(reg, UNKNOWN)
             return state
 
         if m in ("mov", "movs") and len(ops) == 2 and ops[0].type == ARM_OP_REG:
@@ -211,7 +254,8 @@ class IndirectResolver:
         if m in ("add", "adds", "addw") and len(ops) == 3 and ops[2].type == ARM_OP_IMM:
             base = state.get(ops[1].reg, UNKNOWN) if ops[1].type == ARM_OP_REG else UNKNOWN
             if isinstance(base, SymAddr):
-                assign(ops[0].reg, SymAddr(base.addr, base.off + int(ops[2].imm)))
+                off = None if base.off is None else base.off + int(ops[2].imm)
+                assign(ops[0].reg, SymAddr(base.addr, off))
             else:
                 assign(ops[0].reg, UNKNOWN)
             return state

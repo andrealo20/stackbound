@@ -50,7 +50,11 @@ def _build_parser() -> argparse.ArgumentParser:
             action="store_true",
             help="ignore interrupts entirely (unsound, for comparison)",
         )
-        sp.add_argument("--fpu", action="store_true", help="assume an extended FP frame")
+        sp.add_argument(
+            "--fpu",
+            action="store_true",
+            help="assume an extended FP frame even if the configuration says fpu: false",
+        )
         sp.add_argument("--prigroup", type=int, default=None)
         sp.add_argument("--stack-size", type=int, default=None)
         sp.add_argument("--entry", default=None)
@@ -120,7 +124,6 @@ def main(argv: list[str] | None = None) -> int:
     )
     if args.prigroup is not None:
         opts.prigroup = args.prigroup
-    opts.fpu = args.fpu
 
     if args.config:
         opts = config_mod.to_options(config_mod.load(args.config), opts)
@@ -129,8 +132,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.fpu:
             opts.fpu = True
 
-    elf = ElfInfo(args.elf)
-    result = analyse(elf, opts)
+    try:
+        result = analyse(ElfInfo(args.elf), opts)
+    except ValueError as e:
+        # Not a number that fails to fit: there is no number.
+        print(f"stackbound: {e}", file=sys.stderr)
+        return EXIT_UNBOUNDED
 
     try:
         if args.json:
