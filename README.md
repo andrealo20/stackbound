@@ -16,7 +16,7 @@ five of six it is exact to the byte. A bound that ignores interrupts (which is w
 every free tool surveyed below does) reports **276 bytes for a firmware that
 used 684**.
 
-![bound versus measurement](results/bound_vs_measured.png)
+![bound versus measurement](results/bound_vs_measured.svg)
 
 | case | what it exercises | measured | bound | ratio |
 |---|---|---:|---:|---:|
@@ -109,7 +109,7 @@ loop is still known at a call site inside it.
 
 What this is worth, on the same firmwares:
 
-![what resolution is worth](results/indirect_precision.png)
+![what resolution is worth](results/indirect_precision.svg)
 
 On `table` the analysis reads the four-entry dispatch table out of `.rodata` and
 returns exactly the three functions in it, excluding `cmd_orphan` whose address
